@@ -21,4 +21,5 @@ env
 logs
 stats
 Dockerfile
+data/
 __localcode/

@@ -1,0 +1,26 @@
+version: '3.9'
+
+services:
+  psql:
+    container_name: psql
+    image: postgres:15.4
+    ports:
+      - 5432:5432
+    volumes:
+      - ./data/postgresql:/var/lib/postgresql/data
+    env_file:
+      - .env
+
+  gerenciador:
+    container_name: gerenciador
+    build:
+      context: .
+    ports:
+      - 8000:8000
+    volumes:
+      - .:/automacao
+    env_file:
+      - .env
+    depends_on:
+      - psql
+  
