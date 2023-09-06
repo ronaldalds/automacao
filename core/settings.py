@@ -43,6 +43,12 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    # Django rest framework
+    'rest_framework',
+    # Projeto automação
+    'app.ost',
+    'app.imri',
+    'app.imre',
 ]
 
 MIDDLEWARE = [
@@ -83,14 +89,21 @@ WSGI_APPLICATION = 'core.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': env.get("DB_ENGINE", "change-me"),
-        'NAME': env.get("POSTGRES_DB", "change-me"),
-        'USER': env.get("POSTGRES_USER", "change-me"),
-        'PASSWORD': env.get("POSTGRES_PASSWORD", "change-me"),
-        'HOST': env.get("POSTGRES_HOST", "change-me"),
-        'PORT': env.get("POSTGRES_PORT", "change-me"),
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': env.get("DB_ENGINE", "change-me"),
+#         'NAME': env.get("POSTGRES_DB", "change-me"),
+#         'USER': env.get("POSTGRES_USER", "change-me"),
+#         'PASSWORD': env.get("POSTGRES_PASSWORD", "change-me"),
+#         'HOST': env.get("POSTGRES_HOST", "change-me"),
+#         'PORT': env.get("POSTGRES_PORT", "change-me"),
+#     }
+# }
 
 DJANGO_SUPERUSER_USERNAME=env.get("DJANGO_SUPERUSER_USERNAME", "change-me")
 DJANGO_SUPERUSER_PASSWORD=env.get("DJANGO_SUPERUSER_PASSWORD", "change-me")

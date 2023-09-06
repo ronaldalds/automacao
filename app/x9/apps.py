@@ -3,4 +3,4 @@ from django.apps import AppConfig
 
 class X9Config(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
-    name = 'x9'
+    name = 'app.x9'

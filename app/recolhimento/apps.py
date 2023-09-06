@@ -3,4 +3,4 @@ from django.apps import AppConfig
 
 class RecolhimentoConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
-    name = 'recolhimento'
+    name = 'app.recolhimento'
