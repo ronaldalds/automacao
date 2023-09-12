@@ -10,7 +10,7 @@ ENV PYTHONDONTWRITEBYTECODE 1
 # Em resumo, você verá os outputs do Python em tempo real.
 ENV PYTHONUNBUFFERED 1
 
-WORKDIR /automacao
+WORKDIR /gerenciador
 
 COPY . .
 
@@ -19,10 +19,6 @@ ENV TZ=America/Fortaleza
 RUN pip install --upgrade pip
 
 RUN pip install --no-cache-dir -r requirements.txt
-
-# A porta 8000 estará disponível para conexões externas ao container
-# É a porta que vamos usar para o Django.
-EXPOSE 8000
 
 # uso em produção
 # CMD gunicorn core.wsgi:application --bind 0.0.0.0:8000

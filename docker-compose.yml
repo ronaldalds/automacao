@@ -9,18 +9,18 @@ services:
     volumes:
       - ./data/postgresql:/var/lib/postgresql/data
     env_file:
-      - .env
+      - dotenv_files/.env
 
   gerenciador:
     container_name: gerenciador
     build:
-      context: .
+      context: ./gerenciador
     ports:
       - 8000:8000
     volumes:
-      - .:/automacao
+      - ./gerenciador:/gerenciador
     env_file:
-      - .env
+      - dotenv_files/.env
     depends_on:
       - psql
   

@@ -23,3 +23,4 @@ stats
 Dockerfile
 data/
 __localcode/
+venv/
