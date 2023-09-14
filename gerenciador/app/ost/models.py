@@ -1,5 +1,5 @@
 from django.db import models
-from django.dispatch import receiver
+
 
 class Tecnico(models.Model):
     nome = models.CharField(max_length=200)
@@ -28,9 +28,6 @@ class Mensagem(models.Model):
     data_envio = models.DateTimeField(auto_now=True)
     status = models.BooleanField(default=False)
 
-    def __str__(self) -> str:
-        return str(self.chat_id)
-
     class Meta:
         verbose_name_plural = "Mensagens"
 
@@ -38,7 +35,7 @@ class AlertaSLA(models.Model):
     hora = models.IntegerField()
 
     def __str__(self) -> str:
-        return str(self.sla)
+        return self.hora
 
     class Meta:
         verbose_name_plural = "Alertas"
@@ -47,5 +44,8 @@ class InformacaoOS(models.Model):
     id_tipo_os = models.ForeignKey(TipoOS, on_delete=models.CASCADE)
     nome = models.CharField(max_length=300)
 
+    def __str__(self) -> str:
+        return self.nome
+    
     class Meta:
         verbose_name_plural = "Informacoes_OS"

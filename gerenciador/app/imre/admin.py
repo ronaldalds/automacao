@@ -4,7 +4,7 @@ from .models import *
 # Register your models here.
 @admin.register(Tecnico)
 class TecnicoAdmin(admin.ModelAdmin):
-    list_display = ('id', 'nome', 'login_mk','chat_id', 'status')
+    list_display = ('id', 'nome', 'login_goon','chat_id', 'status')
     list_filter = ('status',)
     search_fields = ['nome',]
 

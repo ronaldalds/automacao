@@ -3,7 +3,7 @@ from django.db import models
 
 class Tecnico(models.Model):
     nome = models.CharField(max_length=200)
-    login_mk = models.CharField(max_length=200)
+    login_goon = models.CharField(max_length=200)
     chat_id = models.IntegerField()
     status = models.BooleanField(default=True)
 
@@ -28,9 +28,6 @@ class Mensagem(models.Model):
     data_envio = models.DateTimeField(auto_now=True)
     status = models.BooleanField(default=False)
 
-    def __str__(self) -> str:
-        return str(self.chat_id)
-
     class Meta:
         verbose_name_plural = "Mensagens"
 
@@ -38,7 +35,7 @@ class AlertaSLA(models.Model):
     hora = models.IntegerField()
 
     def __str__(self) -> str:
-        return str(self.sla)
+        return self.hora
 
     class Meta:
         verbose_name_plural = "Alertas"
@@ -47,5 +44,8 @@ class InformacaoOS(models.Model):
     id_tipo_os = models.ForeignKey(TipoOS, on_delete=models.CASCADE)
     nome = models.CharField(max_length=300)
 
+    def __str__(self) -> str:
+        return self.nome
+    
     class Meta:
         verbose_name_plural = "Informacoes_OS"

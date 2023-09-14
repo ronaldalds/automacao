@@ -44,9 +44,15 @@ INSTALLED_APPS = [
     # Django rest framework
     'rest_framework',
     # Projeto automação
-    'app.ost',
-    'app.imri',
+    'app.cancelamento',
+    'app.dashboard',
+    'app.goontodesk',
     'app.imre',
+    'app.imri',
+    'app.ost',
+    'app.recolhimento',
+    'app.spc',
+    'app.x9',
 ]
 
 MIDDLEWARE = [

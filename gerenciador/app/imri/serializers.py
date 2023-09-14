@@ -7,28 +7,28 @@ from .models import *
 class TecnicoSerializer(serializers.ModelSerializer):
     class Meta:
         model = Tecnico
-        fields = '__all__'
+        fields = ["id", "nome", "login_goon", "chat_id", "status",]
 
 
 class TipoOSSerializer(serializers.ModelSerializer):
     class Meta:
         model = TipoOS
-        fields = '__all__'
+        fields = ["id", "tipo", "sla",]
 
 
 class MensagemSerializer(serializers.ModelSerializer):
     class Meta:
         model = Mensagem
-        fields = '__all__'
+        fields = ["id", "tecnico_id", "alerta_id", "mensagem", "cod_os", "data_envio", "status",]
 
 
 class AlertaSLASerializer(serializers.ModelSerializer):
     class Meta:
         model = AlertaSLA
-        fields = '__all__'
+        fields = ["id", "hora",]
 
 
 class InformacaoOSSerializer(serializers.ModelSerializer):
     class Meta:
         model = InformacaoOS
-        fields = '__all__'
+        fields = ["id", "id_tipo_os", "nome",]
