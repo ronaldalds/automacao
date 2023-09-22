@@ -9,6 +9,7 @@ class CancelamentoAdmin(admin.ModelAdmin):
                     'contrato',
                     'cod_pessoa',
                     'documento',
+                    'solicitante',
                     'status_cancelamento',
                     )
     list_filter = ('status_cancelamento', 'mk',)

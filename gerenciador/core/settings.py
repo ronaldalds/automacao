@@ -16,7 +16,6 @@ import os
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
@@ -30,7 +29,6 @@ ALLOWED_HOSTS = [
     h.strip() for h in os.environ.get("ALLOWED_HOSTS", "*").split(",")
     if h.strip()
 ]
-
 
 # Application definition
 
@@ -56,6 +54,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    # arquivos estaticos modo produção
     'whitenoise.middleware.WhiteNoiseMiddleware',
 
     'django.middleware.security.SecurityMiddleware',
@@ -90,24 +89,17 @@ WSGI_APPLICATION = 'core.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
-if DEBUG == 1:
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': BASE_DIR / 'db.sqlite3',
-        }
+
+DATABASES = {
+    'default': {
+        'ENGINE': os.environ.get("DB_ENGINE", "change-me"),
+        'NAME': os.environ.get("POSTGRES_DB", "change-me"),
+        'USER': os.environ.get("POSTGRES_USER", "change-me"),
+        'PASSWORD': os.environ.get("POSTGRES_PASSWORD", "change-me"),
+        'HOST': os.environ.get("POSTGRES_HOST", "change-me"),
+        'PORT': os.environ.get("POSTGRES_PORT", "change-me"),
     }
-else:
-    DATABASES = {
-        'default': {
-            'ENGINE': os.environ.get("DB_ENGINE", "change-me"),
-            'NAME': os.environ.get("POSTGRES_DB", "change-me"),
-            'USER': os.environ.get("POSTGRES_USER", "change-me"),
-            'PASSWORD': os.environ.get("POSTGRES_PASSWORD", "change-me"),
-            'HOST': os.environ.get("POSTGRES_HOST", "change-me"),
-            'PORT': os.environ.get("POSTGRES_PORT", "change-me"),
-        }
-    }
+}
 
 DJANGO_SUPERUSER_USERNAME=os.environ.get("DJANGO_SUPERUSER_USERNAME", "change-me")
 DJANGO_SUPERUSER_PASSWORD=os.environ.get("DJANGO_SUPERUSER_PASSWORD", "change-me")

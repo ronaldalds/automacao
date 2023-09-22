@@ -1,7 +1,8 @@
 from django.contrib import admin
 from .models import *
+# from simple_history.admin import SimpleHistoryAdmin
 
-# Register your models here.
+# Register your models here.  
 @admin.register(Tecnico)
 class TecnicoAdmin(admin.ModelAdmin):
     list_display = ('id', 'nome', 'login_mk','chat_id', 'status')
@@ -29,3 +30,5 @@ class AlertaSLAAdmin(admin.ModelAdmin):
 class InformacaoOSAdmin(admin.ModelAdmin):
     list_display = ('id', 'id_tipo_os', 'nome')
     list_filter = ('id_tipo_os',)
+
+# admin.site.register(Tecnico, SimpleHistoryAdmin)

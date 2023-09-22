@@ -9,23 +9,24 @@ class Desk:
         self.__auth = self.authentication()
 
     def authentication(self):
+        headers = {
+            "Authorization": os.environ.get("CHAVE_DESK_ADM")
+            }
+        data_json = {
+            "PublicKey": os.environ.get("CHAVE_DESK_AMBIENTE")
+            }
         try:
-            headers = {
-                "Authorization": os.environ.get("CHAVE_DESK_ADM")
-                }
-            data_json = {
-                "PublicKey": os.environ.get("CHAVE_DESK_AMBIENTE")
-                }
             response = requests.post(self.__url_auth, json=data_json, headers=headers)
-
-            if response.status_code == 200:
-                return response.json()
-            else:
-                print(response)
+        except:
+            print("Error na resposta da rota autenticar")
+            time.sleep(14)
+            self.authentication()
             
-        except Exception as e:
-            print(f"Error getting: {e}")
-    
+        if (response.status_code == 200) and (len(response.json()) == 59):
+            return response.json()
+        else:
+            print("Error na resposta da rota autenticar")
+
     def relatorio(self, id) -> dict:
         headers = {
             "Authorization": self.__auth
@@ -41,6 +42,7 @@ class Desk:
                 headers=headers
             )
         except:
+            print("Error na resposta da rota relatário")
             time.sleep(60)
             self.__auth = self.authentication()
             self.relatorio(id)
@@ -48,6 +50,7 @@ class Desk:
         if (response.status_code == 200) and (response.json().get("root")):
             return response.json()
         else:
+            print("Error na resposta da rota relatário")
             self.__auth = self.authentication()
             self.relatorio(id)
 

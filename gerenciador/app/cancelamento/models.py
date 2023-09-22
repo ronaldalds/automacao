@@ -2,6 +2,7 @@ from django.db import models
 
 # Create your models here.
 class Cancelamento(models.Model):
+    solicitante = models.CharField(max_length=128)
     mk = models.IntegerField()
     contrato = models.IntegerField()
     atraso = models.IntegerField()

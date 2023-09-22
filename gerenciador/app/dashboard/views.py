@@ -1,32 +1,27 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from .util import Desk
+import os
 
 # Create your views here.
 FLAG = 1
-def ajuste_chamados(chamados: [dict]):
-
-    assunto = dict.get("Assunto")
-    operador = dict.get("NomeOperador", "Na Fila")
-    cod_chamado = dict.get("CodChamado")
-    data_criacao = dict.get("DataCriacao")
-    return 
 
 def dashboard(request, *args, **kwargs):
     global FLAG
     desk = Desk()
 
     if FLAG == 1:
-        response: dict = desk.relatorio("100").get("root")
+        response: dict = desk.relatorio(os.environ.get("ID_RELATORIO_DESK_SISTEMAS"))
         titulo = 'Sistemas'
-        chamados = response
-        qtd_chamados = len(chamados)
+        qtd_chamados = response.get("total", 0)
+        chamados = response.get("root").get("root") if qtd_chamados == 0 else response.get("root")
         status = 'bg-success' if qtd_chamados == 0 else 'bg-danger'
         FLAG = 0
+
     else:
-        response = desk.relatorio("102").get("root").get("root")
+        response: dict = desk.relatorio(os.environ.get("ID_RELATORIO_DESK_SUPORTE_TI"))
         titulo = 'Suporte a T.I.'
-        chamados = response
-        qtd_chamados = len(chamados)
+        qtd_chamados = response.get("total", 0)
+        chamados = response.get("root").get("root") if qtd_chamados == 0 else response.get("root")
         status = 'bg-success' if qtd_chamados == 0 else 'bg-danger'
         FLAG = 1
 

@@ -2,6 +2,7 @@ from django.db import models
 
 # Create your models here.
 class Recolhimento(models.Model):
+    solicitante = models.CharField(max_length=128)
     mk = models.IntegerField()
     contrato = models.IntegerField()
     qtd_conexoes = models.IntegerField()
