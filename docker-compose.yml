@@ -2,14 +2,17 @@ version: '3.9'
 
 services:
   psql:
-    container_name: psql
     image: postgres:latest
+    container_name: psql-noc
+    environment:
+      POSTGRES_DB: bot_sistema
+      POSTGRES_USER: ralds
+      POSTGRES_PASSWORD: ralds
     ports:
-      - 5432:5432
-    volumes:
-      - ./data/postgresql:/var/lib/postgresql/data
-    env_file:
-      - dotenv_files/.env
+      - "5432:5432"
+    # volumes:
+    #   - ./data:/var/lib/postgresql/data
+
 
   gerenciador:
     container_name: gerenciador
@@ -18,8 +21,6 @@ services:
     ports:
       - 8000:8000
     volumes:
-      - ./gerenciador:/gerenciador
-    env_file:
-      - dotenv_files/.env
+      - .:/app
     depends_on:
       - psql
