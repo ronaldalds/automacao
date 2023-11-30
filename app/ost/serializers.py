@@ -7,28 +7,41 @@ from .models import *
 class TecnicoSerializer(serializers.ModelSerializer):
     class Meta:
         model = Tecnico
-        fields = ["id", "nome", "login_mk", "chat_id", "status",]
+        fields = '__all__'
 
 
 class TipoOSSerializer(serializers.ModelSerializer):
     class Meta:
         model = TipoOS
-        fields = ["id", "tipo", "sla",]
+        fields = '__all__'
 
 
-class MensagemSerializer(serializers.ModelSerializer):
+class TecnicoMensagemSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Mensagem
-        fields = ["id", "tecnico_id", "alerta_id", "mensagem", "cod_os", "data_envio", "status",]
+        model = TecnicoMensagem
+        fields = '__all__'
+        
 
 
-class AlertaSLASerializer(serializers.ModelSerializer):
+class TempoSLASerializer(serializers.ModelSerializer):
     class Meta:
-        model = AlertaSLA
-        fields = ["id", "hora",]
+        model = TempoSLA
+        fields = '__all__'
 
 
-class InformacaoOSSerializer(serializers.ModelSerializer):
+class SlaOSSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = SlaOS
+        fields = '__all__'
+
+
+class InformacaoOSSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = InformacaoOS
-        fields = ["id", "id_tipo_os", "nome",]
+        fields = '__all__'
+
+
+class LogSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Log
+        fields = '__all__'

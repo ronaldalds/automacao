@@ -1,9 +1,14 @@
 from django.db import models
 
+
 # Create your models here.
 class Alerta(models.Model):
-    automovel = models.CharField(max_length=128)
-    placa = models.CharField(max_length=7)
+    nome = models.CharField(max_length=128)
     velocidade = models.IntegerField()
-    horario = models.DateTimeField()
-    enviado = models.BooleanField(default=False)
+    tipo = models.IntegerField()
+    ciclo = models.IntegerField()
+
+
+class Api(models.Model):
+    key = models.CharField(max_length=128)
+    secret = models.CharField(max_length=128)

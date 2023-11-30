@@ -351,10 +351,10 @@ button#filter-toogle-button-hider:hover {
 
 [data-theme="light"] #filter-toogle-button-hider {
     background: var(--breadcrumbs-bg);
-    color: var(--darkened-bg);
+    color: var(--breadcrumbs-fg);
 }
 
 [data-theme="auto"] #filter-toogle-button-hider {
     background: var(--breadcrumbs-bg);
-    color: var(--darkened-bg);
+    color: var(--breadcrumbs-fg);
 }

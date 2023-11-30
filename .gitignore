@@ -6,6 +6,9 @@ __localcode
 /data/
 /static/
 
+# pasta com arquivos para teste
+/t/
+
 # Django #
 *.log
 *.pot

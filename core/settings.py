@@ -12,9 +12,9 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 
 from pathlib import Path
 import os
-from dotenv import load_dotenv
+from dotenv import dotenv_values
 
-load_dotenv()
+env = dotenv_values(".env")
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -24,13 +24,13 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.getenv("SECRET_KEY", "change-me")
+SECRET_KEY = env.get("SECRET_KEY", "change-me")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = bool(int(os.getenv("DEBUG", 1)))
+DEBUG = bool(int(env.get("DEBUG", 1)))
 
 ALLOWED_HOSTS = [
-    h.strip() for h in os.getenv("ALLOWED_HOSTS", "*").split(",")
+    h.strip() for h in env.get("ALLOWED_HOSTS", "*").split(",")
     if h.strip()
 ]
 
@@ -43,24 +43,31 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    # API
-    'rest_framework',
-    'rest_framework.authtoken',
-    'drf_yasg',
     # Log
     'reversion',
     # Import Export
     'import_export',
+    # API
+    'rest_framework',
+    'rest_framework.authtoken',
+    'drf_yasg',
+    # Sistemas
+    'mk',
+    # 'desk',
+    # 'goon',
+    # 'telegram',
+    # 'mkat',
+    # 'cronos',
     # APP
+    # 'app.dashboard',
     'app.cancelamento',
-    'app.dashboard',
-    'app.goontodesk',
+    # 'app.recolhimento',
+    # 'app.spc',
+    # 'app.ost',
     # 'app.imre',
     # 'app.imri',
-    'app.ost',
-    'app.recolhimento',
-    'app.spc',
-    'app.x9',
+    # 'app.goontodesk',
+    # 'app.x9',
 ]
 
 MIDDLEWARE = [
@@ -106,11 +113,11 @@ WSGI_APPLICATION = 'core.wsgi.application'
 # DATABASES = {
 #     'default': {
 #         'ENGINE': 'django.db.backends.postgresql',
-#         'NAME': os.getenv("DB_NAME", "change-me"),
-#         'USER': os.getenv("DB_USER", "change-me"),
-#         'PASSWORD': os.getenv("DB_PASSWORD", "change-me"),
-#         'HOST': os.getenv("DB_HOST", "change-me"),
-#         'PORT': os.getenv("DB_PORT", "change-me"),
+#         'NAME': env.get("DB_NAME", "change-me"),
+#         'USER': env.get("DB_USER", "change-me"),
+#         'PASSWORD': env.get("DB_PASSWORD", "change-me"),
+#         'HOST': env.get("DB_HOST", "change-me"),
+#         'PORT': env.get("DB_PORT", "change-me"),
 #     }
 # }
 DATABASES = {

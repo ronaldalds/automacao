@@ -1,16 +1,18 @@
-from django.shortcuts import render, redirect
-from .util import Desk
 import os
+from desk.desk_drive import Desk
+from django.shortcuts import render
+from dotenv import dotenv_values
+
+env = dotenv_values(".env")
 
 # Create your views here.
 FLAG = 1
-
+desk = Desk()
 def dashboard(request, *args, **kwargs):
     global FLAG
-    desk = Desk()
 
     if FLAG == 1:
-        response: dict = desk.relatorio(os.environ.get("ID_RELATORIO_DESK_SISTEMAS"))
+        response: dict = desk.relatorio(env.get("ID_RELATORIO_DESK_SISTEMAS"))
         titulo = 'Sistemas'
         qtd_chamados = response.get("total", 0)
         chamados = response.get("root").get("root") if qtd_chamados == 0 else response.get("root")
@@ -18,7 +20,7 @@ def dashboard(request, *args, **kwargs):
         FLAG = 0
 
     else:
-        response: dict = desk.relatorio(os.environ.get("ID_RELATORIO_DESK_SUPORTE_TI"))
+        response: dict = desk.relatorio(env.get("ID_RELATORIO_DESK_SUPORTE_TI"))
         titulo = 'Suporte a T.I.'
         qtd_chamados = response.get("total", 0)
         chamados = response.get("root").get("root") if qtd_chamados == 0 else response.get("root")
