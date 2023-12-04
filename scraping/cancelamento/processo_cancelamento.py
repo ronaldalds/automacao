@@ -34,12 +34,12 @@ class ProcessoCancelamento:
         self.__financeiro = Financeiro()
         self.__painel_do_cliente = PainelDoCliente()
 
-    def _message_error(self, message) -> None:
+    def _message_error(self, message) -> Cancelamento:
         error = f"ERROR;{datetime.now().strftime('%d/%m/%Y %H:%M')}"
         self.__conexao.observacao = f'{error};{message}'
         return self.__conexao
 
-    def _message_sucess(self, message) -> None:
+    def _message_sucess(self, message) -> Cancelamento:
         sucess = f"SUCESS;{datetime.now().strftime('%d/%m/%Y %H:%M')}"
         self.__conexao.observacao = f'{sucess};{message}'
         return self.__conexao
@@ -52,6 +52,12 @@ class ProcessoCancelamento:
         return id
 
     def _set_multa(self, browser: Mk) -> Cancelamento | None:
+        try:
+            id_profile = self._get_id(Profile, self.__conexao.profile)
+            print(id_profile)
+        except Exception as e:
+            return self._message_error(f"Error: {e}")
+
         # clique editar contrato
         try:
             browser.iframePainel(self.__financeiro, self.__painel_do_cliente)
@@ -134,62 +140,63 @@ class ProcessoCancelamento:
             browser.close()
             return self._message_error(f"Error plano de contas: {e}")
 
-        #     # próxima etapa da multa
-        #     try:
-        #         browser.click('//*[@title="Próxima etapa."]')
-        #     except:
-        #         browser.close()
-        #         item.observacao = f'{error};próxima etapa da multa'
-        #         return item
+        # próxima etapa da multa
+        try:
+            browser.click('//*[@title="Próxima etapa."]')
+        except Exception as e:
+            browser.close()
+            return self._message_error(f"Error próxima etapa da multa: {e}")
 
-        #     # faturar ?
-        #     try:
-        #         browser.click('//div[@title="Deseja faturar agora estas contas?\nMarcando SIM, será criada uma fatura 1/1 para cada conta inserida."]/div/button')
-        #         browser.click('//option[@value="S"]')
-        #     except:
-        #         browser.close()
-        #         item.observacao = f'{error};faturar ?'
-        #         return item
+        # faturar ?
+        try:
+            browser.click('//div[@title="Deseja faturar agora estas contas?\nMarcando SIM, será criada uma fatura 1/1 para cada conta inserida."]/div/button')
+            browser.click('//option[@value="S"]')
+        except Exception as e:
+            browser.close()
+            return self._message_error(f"Error faturar ?: {e}")
 
-        #     # qual profile usar
-        #     try:
-        #         browser.click('//div[@title="Selecione a profile desejada"]/div/button')
-        #         browser.write('//input[@id="lookupSearchQuery"]', "B" + Keys.ENTER)
-        #         browser.click(f'//option[@value="{profile}"]')
-        #     except:
-        #         browser.close()
-        #         item.observacao = f'{error};qual profile usar'
-        #         return item
+        # qual profile usar
+        try:
+            browser.click(
+                '//div[@title="Selecione a profile desejada"]/div/button'
+            )
+            browser.write(
+                '//input[@id="lookupSearchQuery"]',
+                f"{self.__conexao.profile.split()[0]}" + Keys.ENTER)
+            browser.click(f'//option[@value="{id_profile}"]')
+        except Exception as e:
+            browser.close()
+            return self._message_error(f"Error qual profile usar: {e}")
 
-        #     # marca check box
-        #     try:
-        #         browser.click('//input[@title="Marque essa opção para confirmar seu desejo de inserir a nova conta."]')
-        #     except:
-        #         browser.close()
-        #         item.observacao = f'{error};marca check box'
-        #         return item
+        # marca check box
+        try:
+            browser.click('//input[@title="Marque essa opção para confirmar seu desejo de inserir a nova conta."]')
+        except Exception as e:
+            browser.close()
+            return self._message_error(f"Error marca check box: {e}")
 
-        #     # concluir multa
-        #     try:
-        #         browser.click('//button[@title="Clique para realizar a inserção"]')
-        #     except:
-        #         browser.close()
-        #         item.observacao = f'{error};concluir multa'
-        #         return item
+        # concluir multa
+        try:
+            browser.click('//button[@title="Clique para realizar a inserção"]')
+        except Exception as e:
+            browser.close()
+            return self._message_error(f"Error concluir multa: {e}")
 
-        #     # fechar visualizar/Editar contrato
-        #     try:
-        #         browser.iframeMain()
-        #         browser.click('//div[@class="OptionClose"]')
-        #     except:
-        #         browser.close()
-        #         item.observacao = f'{error};fechar visualizar/Editar contrato'
-        #         return item
+        # fechar visualizar/Editar contrato
+        try:
+            browser.iframeMain()
+            browser.click('//div[@class="OptionClose"]')
+        except Exception as e:
+            browser.close()
+            return self._message_error(
+                f"Error fechar visualizar/Editar contrato: {e}"
+            )
+
+        return None
 
     def cancelar(self) -> Cancelamento:
         try:
             id_tipo_os = self._get_id(TipoOS, self.__conexao.tipo_os)
-            id_profile = self._get_id(Profile, self.__conexao.profile)
             id_motivo_de_cancelamento = self._get_id(
                 MotivoCancelamento, self.__conexao.motivo_cancelamento
             )
@@ -197,7 +204,6 @@ class ProcessoCancelamento:
                 GrupoAtendimento, self.__conexao.id_grupo_atendimento
             )
             print(id_tipo_os)
-            print(id_profile)
             print(id_motivo_de_cancelamento)
             print(id_grupo_atendimento)
         except Exception as e:
