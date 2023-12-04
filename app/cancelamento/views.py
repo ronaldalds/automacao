@@ -8,7 +8,7 @@ from concurrent.futures import ThreadPoolExecutor
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.authentication import SessionAuthentication
-from scraping.cancelamento.processo_cancelamento import cancelamento
+from scraping.cancelamento.processo_cancelamento import ProcessoCancelamento
 
 running = False
 
@@ -20,11 +20,8 @@ class CancelamentoViewSet(ViewSet):
 
     def _processo(self, conexao: Cancelamento):
         if running:
-            # sleep(10)
-            # conexao.observacao = 'SUCESS;cancelamento de contrato conluído'
-            # conexao.status = True
-            # return conexao
-            return cancelamento(item=conexao)
+            cancelamento = ProcessoCancelamento(conexao)
+            return cancelamento.cancelar()
         else:
             return None
 

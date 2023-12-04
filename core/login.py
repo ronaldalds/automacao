@@ -11,11 +11,12 @@ def cronos_admin_login(request):
     if request.method == 'POST':
         username: str = request.POST['username']
         password: str = request.POST['password']
+        next_url = request.GET.get('next', reverse('admin:index'))
         if username == "admin":
             user = authenticate(request, username=username, password=password)
             if user is not None:
                 login(request, user)
-                return HttpResponseRedirect(reverse('admin:index'))
+                return HttpResponseRedirect(next_url)
             else:
                 messages.error(request, 'Invalid Email or password.')
                 return render(request, 'admin/login.html')
@@ -52,13 +53,13 @@ def cronos_admin_login(request):
                     new_group.user_set.add(user)
                     user.save()
                     login(request, user)
-                    return HttpResponseRedirect(reverse('admin:index'))
+                    return HttpResponseRedirect(next_url)
                 else:
                     user.set_password(password)
                     new_group.user_set.add(user)
                     user.save()
                     login(request, user)
-                    return HttpResponseRedirect(reverse('admin:index'))
+                    return HttpResponseRedirect(next_url)
             else:
                 user = User.objects.create_user(username, password=password)
                 user.is_staff = True
@@ -72,7 +73,7 @@ def cronos_admin_login(request):
 
                 user.save()
                 login(request, user)
-                return HttpResponseRedirect(reverse('admin:index'))
+                return HttpResponseRedirect(next_url)
 
         else:
             messages.error(request, 'Invalid Email or password.')

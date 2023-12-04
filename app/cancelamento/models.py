@@ -14,6 +14,12 @@ class Cancelamento(models.Model):
     )
     documento_codigo = models.CharField(max_length=128)
     tipo_os = models.CharField(max_length=128)
+    profile = models.CharField(max_length=128, null=True, blank=True)
+    motivo_cancelamento = models.CharField(
+        max_length=128,
+        null=True,
+        blank=True
+    )
     planos_de_contas = models.CharField(max_length=128)
     relato_do_problema = models.TextField()
     detalhes_cancelamento = models.TextField()
