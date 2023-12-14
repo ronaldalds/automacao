@@ -1,14 +1,13 @@
-from django.urls import path
+from django.urls import path, include
 from .views import CancelamentoViewSet
+from rest_framework.routers import SimpleRouter
 
+router = SimpleRouter()
+router.register(r'cancelamentos', CancelamentoViewSet, basename='cancelamento')
 
 urlpatterns = [
     path(
-        "cancelar/",
-        CancelamentoViewSet.as_view({"post": "cancelar"})
-    ),
-    path(
-        "parar/",
-        CancelamentoViewSet.as_view({"post": "parar_cancelamento"})
+        "",
+        include(router.urls)
     ),
 ]

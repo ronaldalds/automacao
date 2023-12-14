@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import *
+from .models import Cancelamento
 
 # Serializers define the API representation.
 
@@ -11,7 +11,7 @@ class CancelamentoSerializer(serializers.ModelSerializer):
             'id',
             'mk',
             'documento_codigo',
-            'loja',
+            'grupo_atendimento_os',
             'status',
             'observacao',
         ]

@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'channels',
     # Log
     'reversion',
     # Import Export
@@ -113,11 +114,11 @@ WSGI_APPLICATION = 'core.wsgi.application'
 # DATABASES = {
 #     'default': {
 #         'ENGINE': 'django.db.backends.postgresql',
-#         'NAME': env.get("DB_NAME", "change-me"),
-#         'USER': env.get("DB_USER", "change-me"),
-#         'PASSWORD': env.get("DB_PASSWORD", "change-me"),
-#         'HOST': env.get("DB_HOST", "change-me"),
-#         'PORT': env.get("DB_PORT", "change-me"),
+#         'NAME': env.get("POSTGRES_DB", "change-me"),
+#         'USER': env.get("POSTGRES_USER", "change-me"),
+#         'PASSWORD': env.get("POSTGRES_PASSWORD", "change-me"),
+#         'HOST': env.get("POSTGRES_HOST", "change-me"),
+#         'PORT': env.get("POSTGRES_PORT", "change-me"),
 #     }
 # }
 DATABASES = {

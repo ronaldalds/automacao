@@ -3,7 +3,7 @@ version: '3.9'
 services:
   psql:
     image: postgres:latest
-    container_name: psql-noc
+    container_name: psql
     environment:
       POSTGRES_DB: bot_sistema
       POSTGRES_USER: ralds
@@ -14,13 +14,15 @@ services:
     #   - ./data:/var/lib/postgresql/data
 
 
-  gerenciador:
-    container_name: gerenciador
+  automacao:
+    container_name: automacao
     build:
-      context: ./gerenciador
+      context: .
     ports:
       - 8000:8000
     volumes:
       - .:/app
+    shm_size: 4g
+    tty: true
     depends_on:
       - psql
