@@ -9,7 +9,7 @@ class Login(models.Model):
     password = models.CharField(max_length=128)
 
 
-class NivelSLA(models.Model):
+class TipoOS(models.Model):
     id_web = models.IntegerField()
     mk = models.IntegerField()
     descricao = models.CharField(max_length=128)
@@ -21,13 +21,13 @@ class Profile(models.Model):
     descricao = models.CharField(max_length=128)
 
 
-class MotivoCancelamento(models.Model):
+class NivelSLA(models.Model):
     id_web = models.IntegerField()
     mk = models.IntegerField()
     descricao = models.CharField(max_length=128)
 
 
-class TipoOS(models.Model):
+class MotivoCancelamento(models.Model):
     id_web = models.IntegerField()
     mk = models.IntegerField()
     descricao = models.CharField(max_length=128)

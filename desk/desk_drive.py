@@ -14,36 +14,33 @@ class AuthDTO:
 
 class Desk:
     def __init__(self):
-        self.__chave_operador: str = env.get("CHAVE_DESK_ADM")
-        self.__chave_ambiente: str = env.get("CHAVE_DESK_AMBIENTE")
-        self.__auth: AuthDTO = self.authentication(
-            operador=self.__chave_operador,
-            ambiente=self.__chave_ambiente
-        )
+        self.chave_operador: str = env.get("CHAVE_DESK_ADM")
+        self.chave_ambiente: str = env.get("CHAVE_DESK_AMBIENTE")
 
-    def authentication(self, operador: str, ambiente: str) -> AuthDTO:
-        headers = {"Authorization": operador}
-        data_json = {"PublicKey": ambiente}
+    def authentication(self) -> AuthDTO:
+        headers = {"Authorization": self.chave_operador}
+        data_json = {"PublicKey": self.chave_ambiente}
         response: AuthDTO = AuthDTO(status=False)
+
         try:
             request = requests.post(
                 "https://api.desk.ms/Login/autenticar",
                 json=data_json,
                 headers=headers
             )
-
             if request.status_code == 200 and (len(request.json()) == 59):
-                response = AuthDTO(token=request.json(), status=True)
+                response.token = request.json()
+                response.status = True
 
             return response
 
         except Exception as e:
             print(f"Error getting: {e}")
             sleep(14)
-            self.authentication(operador, ambiente)
+            self.authentication()
 
     def relatorio(self, id) -> dict:
-        headers = {"Authorization": self.__auth}
+        headers = {"Authorization": self.authentication().token}
         data_json = {"Chave": id}
         try:
             response = requests.post(
@@ -56,7 +53,7 @@ class Desk:
             sleep(60)
             self.__auth = self.authentication()
             self.relatorio(id)
-        
+
         if (response.status_code == 200) and (response.json().get("root")):
             return response.json()
         else:
@@ -74,7 +71,7 @@ class Desk:
         descricao
     ):
 
-        headers = {"Authorization": self.__auth}
+        headers = {"Authorization": self.authentication().token}
         horario_inicial = horario - timedelta(minutes=2)
         data_json = {
             "Chave": chamado_desk,
@@ -104,22 +101,22 @@ class Desk:
 
     def lista_chamados(self):
         try:
-            headers = {"Authorization": self.__auth}
+            headers = {"Authorization": self.authentication().token}
 
             data_json = {
-                    "Pesquisa":"",
-                    "Tatual":"",
-                    "Ativo":"Todos",
-                    "StatusSLA":"N",
+                    "Pesquisa": "",
+                    "Tatual": "",
+                    "Ativo": "Todos",
+                    "StatusSLA": "N",
                     "Colunas":
                     {
-                        "Chave":"on",
-                        "CodChamado":"on",
-                        "ChaveUsuario":"on",
-                        "NomeUsuario":"on",
-                        "SobrenomeUsuario":"on",
-                        "NomeOperador":"on",
-                        "SobrenomeOperador":"on"
+                        "Chave": "on",
+                        "CodChamado": "on",
+                        "ChaveUsuario": "on",
+                        "NomeUsuario": "on",
+                        "SobrenomeUsuario": "on",
+                        "NomeOperador": "on",
+                        "SobrenomeOperador": "on"
                     },
                     "Ordem": [
                         {
@@ -139,13 +136,13 @@ class Desk:
                 return response.json()
             else:
                 print(response)
-        
+
         except Exception as e:
             print(f"Error lista chamados: {e}")
 
     def lista_operador(self):
         try:
-            headers = {"Authorization": self.__auth}
+            headers = {"Authorization": self.authentication().token}
 
             data_json = {
                     "Colunas": {
@@ -157,29 +154,28 @@ class Desk:
                         "GrupoPrincipal": "on",
                         "EmailGrupo": "on",
                         "CodGrupo": "on"
-                    },  
+                    },
                     "Pesquisa": "",
                     "Ativo": "S",
                     "Filtro":
                     {
-                    "Ramal":[""],
-                        "GrupoPrincipal":[""],
-                        "Perfil":[""],
-                        "Online":[""],
-                        "LicencaDMS":[""],
-                        "LicencaCHAT":[""],
-                        "LicencaRCS":[""],
-                        "LicencaFornecedor":[""]
+                        "Ramal": [""],
+                        "GrupoPrincipal": [""],
+                        "Perfil": [""],
+                        "Online": [""],
+                        "LicencaDMS": [""],
+                        "LicencaCHAT": [""],
+                        "LicencaRCS": [""],
+                        "LicencaFornecedor": [""]
                     },
-                    "Ordem":
-                    [ 
+                    "Ordem": [
                         {
-                        "Coluna": "Nome", 
-                        "Direcao": "true"
+                            "Coluna": "Nome",
+                            "Direcao": "true"
                         }
                     ]
                     }
-            
+
             response = requests.post(
                 "https://api.desk.ms/Operadores/lista",
                 json=data_json,
@@ -190,7 +186,7 @@ class Desk:
                 return response.json()
             else:
                 print(response)
-        
+
         except Exception as e:
             print(f"Error lista operador: {e}")
 

@@ -19,7 +19,7 @@ def dashboard(request, *args, **kwargs):
         if qtd_chamados == 0:
             chamados = response.get("root").get("root")
         else:
-            response.get("root")
+            chamados = response.get("root")
         status = 'bg-success' if qtd_chamados == 0 else 'bg-danger'
         FLAG = 0
 
@@ -32,7 +32,7 @@ def dashboard(request, *args, **kwargs):
         if qtd_chamados == 0:
             chamados = response.get("root").get("root")
         else:
-            response.get("root")
+            chamados = response.get("root")
         status = 'bg-success' if qtd_chamados == 0 else 'bg-danger'
         FLAG = 1
 

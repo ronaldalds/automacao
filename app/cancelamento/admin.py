@@ -1,15 +1,14 @@
-from .models import Cancelamento
-from .models import ThreadCancelamento 
+from threading import Thread
+from .processo import Cancelar
 from django.contrib import admin
+from .models import Cancelamento
 from import_export import resources
+from django.contrib import messages
+from .models import ThreadCancelamento
 from reversion.admin import VersionAdmin
-from time import sleep
-# from rest_framework.authtoken.models import Token
 from import_export.admin import ImportExportMixin
 from django.core.exceptions import ValidationError
 from concurrent.futures import ThreadPoolExecutor
-from .processo import Cancelar
-from threading import Thread
 
 
 @admin.register(ThreadCancelamento)
@@ -69,6 +68,10 @@ class CancelamentoAdmin(ImportExportMixin, VersionAdmin):
         # Criando e iniciando o thread
         thread = Thread(target=execute_cancelar, args=(queryset,))
         thread.start()
+        messages.success(
+            request,
+            f'Foi iniciado {len(queryset)} cancelamentos'
+        )
 
     cancelar.short_description = "Cancelar conexão"
 

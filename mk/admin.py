@@ -5,6 +5,11 @@ from .models import (
     Login,
     TipoOS,
     Profile,
+    NivelSLA,
+    MotivoCancelamento,
+    GrupoAtendimento,
+    Defeito,
+    Faturamento,
 )
 
 
@@ -32,6 +37,61 @@ class TipoOSAdmin(ImportExportMixin, VersionAdmin):
 
 @admin.register(Profile)
 class ProfileAdmin(ImportExportMixin, VersionAdmin):
+    list_display = (
+        'id',
+        'id_web',
+        'mk',
+        'descricao',
+    )
+    list_display_links = list_display
+
+
+@admin.register(NivelSLA)
+class NivelSLAAdmin(ImportExportMixin, VersionAdmin):
+    list_display = (
+        'id',
+        'id_web',
+        'mk',
+        'descricao',
+    )
+    list_display_links = list_display
+
+
+@admin.register(MotivoCancelamento)
+class MotivoCancelamentoAdmin(ImportExportMixin, VersionAdmin):
+    list_display = (
+        'id',
+        'id_web',
+        'mk',
+        'descricao',
+    )
+    list_display_links = list_display
+
+
+@admin.register(GrupoAtendimento)
+class GrupoAtendimentoAdmin(ImportExportMixin, VersionAdmin):
+    list_display = (
+        'id',
+        'id_web',
+        'mk',
+        'descricao',
+    )
+    list_display_links = list_display
+
+
+@admin.register(Defeito)
+class DefeitoAdmin(ImportExportMixin, VersionAdmin):
+    list_display = (
+        'id',
+        'id_web',
+        'mk',
+        'descricao',
+    )
+    list_display_links = list_display
+
+
+@admin.register(Faturamento)
+class FaturamentoAdmin(ImportExportMixin, VersionAdmin):
     list_display = (
         'id',
         'id_web',
