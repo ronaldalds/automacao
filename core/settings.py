@@ -43,31 +43,33 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'channels',
+
     # Log
     'reversion',
+
     # Import Export
     'import_export',
+
     # API
     'rest_framework',
     'rest_framework.authtoken',
     'drf_yasg',
+
     # Sistemas
     'mk',
-    # 'desk',
-    # 'goon',
+    'desk',
+    'goon',
     # 'telegram',
     # 'mkat',
     # 'cronos',
+
     # APP
     # 'app.dashboard',
     'app.cancelamento',
-    # 'app.recolhimento',
+    'app.ordem_servico',
+    'app.goontodesk',
     # 'app.spc',
     # 'app.ost',
-    # 'app.imre',
-    # 'app.imri',
-    # 'app.goontodesk',
     # 'app.x9',
 ]
 

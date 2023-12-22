@@ -6,22 +6,24 @@ class Tecnico(models.Model):
     nome = models.CharField(max_length=200, null=False)
     chat_id = models.IntegerField(null=False)
     status = models.BooleanField(default=True)
-    
+
     class Meta:
         verbose_name_plural = 'Tecnicos'
 
     def __str__(self) -> str:
         return self.nome
 
-class TipoOS(models.Model):
+
+class TipoOs(models.Model):
     id = models.BigAutoField(primary_key=True)
     tipo = models.CharField(max_length=300, null=False)
 
     def __str__(self) -> str:
         return str(self.tipo)
-    
+
     class Meta:
-        verbose_name_plural = 'Tipo_OS'
+        verbose_name_plural = 'Tipo O.S.'
+
 
 class TecnicoMensagem(models.Model):
     id = models.BigAutoField(primary_key=True)
@@ -36,9 +38,10 @@ class TecnicoMensagem(models.Model):
         return str(self.chat_id)
 
     class Meta:
-        verbose_name_plural = 'Mensagem'
+        verbose_name_plural = 'Mensagens'
 
-class TempoSLA(models.Model):
+
+class TempoSla(models.Model):
     id = models.BigAutoField(primary_key=True)
     sla = models.IntegerField(null=False)
 
@@ -46,27 +49,30 @@ class TempoSLA(models.Model):
         return str(self.sla)
 
     class Meta:
-        verbose_name_plural = 'SLA'
+        verbose_name_plural = 'S.L.A.'
 
-class SlaOS(models.Model):
+
+class SlaOs(models.Model):
     id = models.BigAutoField(primary_key=True)
-    id_tipo_os = models.ForeignKey(TipoOS, on_delete=models.CASCADE)
+    id_tipo_os = models.ForeignKey(TipoOs, on_delete=models.CASCADE)
     sla = models.IntegerField(null=False)
     status = models.BooleanField(default=True, null=False)
 
     class Meta:
-        verbose_name_plural = 'SLA_OS'
+        verbose_name_plural = 'S.L.A. O.S.'
 
-class InformacaoOS(models.Model):
+
+class InformacaoOs(models.Model):
     id = models.BigAutoField(primary_key=True)
-    id_tipo_os = models.ForeignKey(TipoOS, on_delete=models.CASCADE)
+    id_tipo_os = models.ForeignKey(TipoOs, on_delete=models.CASCADE)
     nome = models.CharField(max_length=300, null=False)
 
     def __str__(self) -> str:
         return f"{self.nome} - {self.id_tipo_os}"
-    
+
     class Meta:
-        verbose_name_plural = 'Informacoes_OS'
+        verbose_name_plural = 'Informacões O.S.'
+
 
 class Log(models.Model):
     id = models.BigAutoField(primary_key=True)

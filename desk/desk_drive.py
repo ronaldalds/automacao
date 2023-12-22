@@ -1,30 +1,29 @@
 import requests
 from time import sleep
 from datetime import datetime, timedelta
-from dotenv import dotenv_values
-
-env: dict = dotenv_values(".env")
+from .models import TokenDesk
+from .models import EndPointDesk
 
 
 class AuthDTO:
-    def __init__(self, status: bool, token: str = None):
+    def __init__(self, status: bool = False, token: str = None):
         self.token: str = token
         self.status: bool = status
 
 
 class Desk:
-    def __init__(self):
-        self.chave_operador: str = env.get("CHAVE_DESK_ADM")
-        self.chave_ambiente: str = env.get("CHAVE_DESK_AMBIENTE")
-
     def authentication(self) -> AuthDTO:
-        headers = {"Authorization": self.chave_operador}
-        data_json = {"PublicKey": self.chave_ambiente}
-        response: AuthDTO = AuthDTO(status=False)
-
+        chave_desk: str = TokenDesk.objects.get(nome="CHAVE_DESK_ADM")
+        headers = {"Authorization": chave_desk.operador}
+        data_json = {"PublicKey": chave_desk.ambiente}
+        response = AuthDTO()
+        url_auth = EndPointDesk.objects.get(
+            grupo="Autenticação",
+            acao="autenticar"
+        ).url
         try:
             request = requests.post(
-                "https://api.desk.ms/Login/autenticar",
+                url_auth,
                 json=data_json,
                 headers=headers
             )
@@ -39,26 +38,28 @@ class Desk:
             sleep(14)
             self.authentication()
 
-    def relatorio(self, id) -> dict:
+    def relatorio(self, id: str) -> dict:
         headers = {"Authorization": self.authentication().token}
         data_json = {"Chave": id}
+        url_relatorio = EndPointDesk.objects.get(
+            grupo="Relatórios",
+            acao="imprimir"
+        ).url
         try:
             response = requests.post(
-                "https://api.desk.ms/Relatorios/imprimir",
+                url_relatorio,
                 json=data_json,
                 headers=headers
             )
         except Exception as e:
             print(f"Error: {e}")
             sleep(60)
-            self.__auth = self.authentication()
             self.relatorio(id)
 
         if (response.status_code == 200) and (response.json().get("root")):
             return response.json()
         else:
             print("Error na resposta da rota relatário")
-            self.__auth = self.authentication()
             self.relatorio(id)
 
     def interagir_chamado(
@@ -73,6 +74,10 @@ class Desk:
 
         headers = {"Authorization": self.authentication().token}
         horario_inicial = horario - timedelta(minutes=2)
+        url_interagir = EndPointDesk.objects.get(
+            grupo="Chamados Operador",
+            acao="interagir"
+        )
         data_json = {
             "Chave": chamado_desk,
             "TChamado": {
@@ -91,7 +96,7 @@ class Desk:
         print(data_json["TChamado"])
         try:
             requests.put(
-                "https://api.desk.ms/ChamadosSuporte/interagir",
+                url_interagir,
                 json=data_json,
                 headers=headers
             )
@@ -102,40 +107,41 @@ class Desk:
     def lista_chamados(self):
         try:
             headers = {"Authorization": self.authentication().token}
+            url_list = EndPointDesk.objects.get(
+                grupo="Chamados Operador",
+                acao="lista"
+            ).url
 
             data_json = {
-                    "Pesquisa": "",
-                    "Tatual": "",
-                    "Ativo": "Todos",
-                    "StatusSLA": "N",
-                    "Colunas":
+                "Pesquisa": "",
+                "Tatual": "",
+                "Ativo": "Todos",
+                "StatusSLA": "N",
+                "Colunas": {
+                    "Chave": "on",
+                    "CodChamado": "on",
+                    "ChaveUsuario": "on",
+                    "NomeUsuario": "on",
+                    "SobrenomeUsuario": "on",
+                    "NomeOperador": "on",
+                    "SobrenomeOperador": "on"
+                },
+                "Ordem": [
                     {
-                        "Chave": "on",
-                        "CodChamado": "on",
-                        "ChaveUsuario": "on",
-                        "NomeUsuario": "on",
-                        "SobrenomeUsuario": "on",
-                        "NomeOperador": "on",
-                        "SobrenomeOperador": "on"
-                    },
-                    "Ordem": [
-                        {
                         "Coluna": "Chave",
                         "Direcao": "false"
-                        }
-                    ]
                     }
-            
+                ]
+            }
+
             response = requests.post(
-                "https://api.desk.ms/ChamadosSuporte/lista",
+                url_list,
                 json=data_json,
                 headers=headers
             )
 
             if response.status_code == 200:
                 return response.json()
-            else:
-                print(response)
 
         except Exception as e:
             print(f"Error lista chamados: {e}")
@@ -143,73 +149,70 @@ class Desk:
     def lista_operador(self):
         try:
             headers = {"Authorization": self.authentication().token}
+            url_list = EndPointDesk.objects.get(
+                grupo="Operadores",
+                acao="lista"
+            ).url
 
             data_json = {
-                    "Colunas": {
-                        "Chave": "on",
-                        "Nome": "on",
-                        "Sobrenome": "on",
-                        "Email": "on",
-                        "OnOff": "on",
-                        "GrupoPrincipal": "on",
-                        "EmailGrupo": "on",
-                        "CodGrupo": "on"
-                    },
-                    "Pesquisa": "",
-                    "Ativo": "S",
-                    "Filtro":
+                "Colunas": {
+                    "Chave": "on",
+                    "Nome": "on",
+                    "Sobrenome": "on",
+                    "Email": "on",
+                    "OnOff": "on",
+                    "GrupoPrincipal": "on",
+                    "EmailGrupo": "on",
+                    "CodGrupo": "on"
+                },
+                "Pesquisa": "",
+                "Ativo": "S",
+                "Filtro": {
+                    "Ramal": [""],
+                    "GrupoPrincipal": [""],
+                    "Perfil": [""],
+                    "Online": [""],
+                    "LicencaDMS": [""],
+                    "LicencaCHAT": [""],
+                    "LicencaRCS": [""],
+                    "LicencaFornecedor": [""]
+                },
+                "Ordem": [
                     {
-                        "Ramal": [""],
-                        "GrupoPrincipal": [""],
-                        "Perfil": [""],
-                        "Online": [""],
-                        "LicencaDMS": [""],
-                        "LicencaCHAT": [""],
-                        "LicencaRCS": [""],
-                        "LicencaFornecedor": [""]
-                    },
-                    "Ordem": [
-                        {
-                            "Coluna": "Nome",
-                            "Direcao": "true"
-                        }
-                    ]
+                        "Coluna": "Nome",
+                        "Direcao": "true"
                     }
+                ]
+            }
 
             response = requests.post(
-                "https://api.desk.ms/Operadores/lista",
+                url_list,
                 json=data_json,
                 headers=headers
             )
 
             if response.status_code == 200:
                 return response.json()
-            else:
-                print(response)
 
         except Exception as e:
             print(f"Error lista operador: {e}")
 
     def operador_do_chamado(self, id_chamado):
         chamados = self.lista_chamados()
-        operadores = self.lista_operador()
-
         for chamado in chamados["root"]:
             try:
                 if chamado["CodChamado"] == id_chamado:
-                    try:
-                        operador_chamado = {
-                            "NomeOperador": chamado["NomeOperador"],
-                            "SobrenomeOperador": chamado["SobrenomeOperador"],
-                        }
-                        for operador in operadores["root"]:
-                            if (operador["Nome"] == operador_chamado["NomeOperador"]) and (operador["Sobrenome"] == operador_chamado["SobrenomeOperador"]):
-                                return operador["Chave"]
-
-                    except Exception as e:
-                        print(f"chamado sem Operador associado! {e}")
-                        return False
+                    operadores = self.lista_operador()
+                    operador_chamado = {
+                        "NomeOperador": chamado["NomeOperador"],
+                        "SobrenomeOperador": chamado["SobrenomeOperador"],
+                    }
+                    for operador in operadores["root"]:
+                        nome = operador["Nome"] == operador_chamado["NomeOperador"]
+                        sobrenome = operador["Sobrenome"] == operador_chamado["SobrenomeOperador"]
+                        if nome and sobrenome:
+                            return operador["Chave"]
 
             except Exception as e:
-                print(f"Error operador do chamado {e}")
+                print(f"Error: {e}")
                 return False

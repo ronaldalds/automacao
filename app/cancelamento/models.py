@@ -6,8 +6,6 @@ class Cancelamento(models.Model):
     mk = models.IntegerField()
     contrato = models.IntegerField()
     cod_pessoa = models.IntegerField()
-    conexao = models.IntegerField()
-    documento_codigo = models.CharField(max_length=128)
     tipo_os = models.CharField(max_length=128)
     defeito = models.CharField(max_length=128)
     profile = models.CharField(max_length=128)
@@ -17,24 +15,17 @@ class Cancelamento(models.Model):
     grupo_atendimento_os = models.CharField(max_length=128)
     incidencia_de_multa = models.CharField(max_length=128)
     data_vcto_multa_contratual = models.CharField(max_length=128)
-    data_a_cancelar = models.CharField(max_length=128)
-    loja = models.CharField(max_length=128)
-    onu_serial = models.CharField(max_length=128)
-    status = models.BooleanField(default=False)
     motivo_cancelamento = models.CharField(max_length=128)
-    os_cancelamento_30d = models.CharField(
-        max_length=128,
-        null=True,
-        blank=True
-    )
     valor_multa = valor_multa = models.DecimalField(
         max_digits=10,
         decimal_places=2
     )
+    status = models.BooleanField(default=False)
+    processamento = models.BooleanField(default=False)
     observacao = models.TextField(null=True, blank=True)
 
     def __str__(self) -> str:
-        return self.documento_codigo
+        return f"{self.contrato}"
 
 
 class ThreadCancelamento(models.Model):

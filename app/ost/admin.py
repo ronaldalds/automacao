@@ -8,7 +8,7 @@ class TecnicoAdmin(admin.ModelAdmin):
     list_filter = ('status',)
     search_fields = ['nome',]
 
-@admin.register(TipoOS)
+@admin.register(TipoOs)
 class TipoOSAdmin(admin.ModelAdmin):
     list_display = ('id', 'tipo')
     search_fields = ['tipo',]
@@ -19,17 +19,17 @@ class TecnicoMensagemAdmin(admin.ModelAdmin):
     list_filter = ('chat_id',)
     search_fields = ['chat_id',]
 
-@admin.register(TempoSLA)
+@admin.register(TempoSla)
 class TempoSLAAdmin(admin.ModelAdmin):
     list_display = ('id', 'sla')
     search_fields = ['sla',]
 
-@admin.register(SlaOS)
+@admin.register(SlaOs)
 class SlaOSAdmin(admin.ModelAdmin):
     list_display = ('id', 'id_tipo_os', 'sla', 'status')
     list_filter = ('sla', 'status',)
 
-@admin.register(InformacaoOS)
+@admin.register(InformacaoOs)
 class InformacaoOSAdmin(admin.ModelAdmin):
     list_display = ('id', 'id_tipo_os', 'nome')
     list_filter = ('id_tipo_os',)

@@ -3,8 +3,24 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.authentication import TokenAuthentication
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework.viewsets import ModelViewSet
-from .serializers import *
-from .models import *
+from .serializers import (
+    TecnicoSerializer,
+    TipoOSSerializer,
+    TecnicoMensagemSerializer,
+    TempoSLASerializer,
+    SlaOSSerializer,
+    InformacaoOSSerializer,
+    LogSerializer
+)
+from .models import (
+    Tecnico,
+    TipoOs,
+    TecnicoMensagem,
+    TempoSla,
+    SlaOs,
+    InformacaoOs,
+    Log
+)
 
 
 class TecnicoViewSet(ModelViewSet):
@@ -19,7 +35,7 @@ class TecnicoViewSet(ModelViewSet):
 
 
 class TipoOSViewSet(ModelViewSet):
-    queryset = TipoOS.objects.all()
+    queryset = TipoOs.objects.all()
     serializer_class = TipoOSSerializer
 
 
@@ -29,17 +45,17 @@ class TecnicoMensagemViewSet(ModelViewSet):
 
 
 class TempoSLAViewSet(ModelViewSet):
-    queryset = TempoSLA.objects.all()
+    queryset = TempoSla.objects.all()
     serializer_class = TempoSLASerializer
 
 
 class SlaOSViewSet(ModelViewSet):
-    queryset = SlaOS.objects.all()
+    queryset = SlaOs.objects.all()
     serializer_class = SlaOSSerializer
 
 
 class InformacaoOSViewSet(ModelViewSet):
-    queryset = InformacaoOS.objects.all()
+    queryset = InformacaoOs.objects.all()
     serializer_class = InformacaoOSSerializer
 
 

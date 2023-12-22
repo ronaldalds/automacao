@@ -1,9 +1,7 @@
 import json
 import xml.etree.ElementTree as ET
 from zeep import Client
-from dotenv import dotenv_values
-
-env = dotenv_values(".env")
+from goon.models import TokenGoon, UrlGoon
 
 
 class Goon:
@@ -26,7 +24,8 @@ class Goon:
             status_sequence_data = []
 
             # Percorre todas as tags StatusInfo dentro de StatusSequence
-            for status_info in form_answer.findall('.//StatusSequence/StatusInfo'):
+            tag_status_info = './/StatusSequence/StatusInfo'
+            for status_info in form_answer.findall(tag_status_info):
                 status_info_data = {}
 
                 # Extrai as informações da tag StatusInfo
@@ -41,14 +40,15 @@ class Goon:
             item_answers_data = []
 
             # Percorre todas as tags ItemAnswer dentro de ItemAnswers
-            for item_answer in form_answer.findall('.//ItemAnswers/ItemAnswer'):
+            tag_item_answer = './/ItemAnswers/ItemAnswer'
+            for item_answer in form_answer.findall(tag_item_answer):
                 item_answer_data = {}
 
                 # Extrai as informações da tag ItemAnswer
                 for child in item_answer:
                     if child.tag == 'Answer':
                         item_answer_data[child.tag] = {
-                            inner_child.tag: inner_child.text for inner_child in child
+                            i_child.tag: i_child.text for i_child in child
                         }
                     else:
                         item_answer_data[child.tag] = child.text
@@ -61,35 +61,39 @@ class Goon:
 
         return results
 
-    def get_all_located_orders_by_agent(self, agente_codigo, mobile_agent, data):
-        reques_data = {
-            'authCode': env["AUTH_CODE_GET_ALL_LOCATED_ORDERS_BY_AGENT"],
-            'clientCode': env["CLIENT_CODE"],
-            'agenteCodigo': agente_codigo,
-            'mobileAgentCodeSource': mobile_agent,
-            'dataFinalizacaoCancelamento': data,
-        }
-
+    def get_all_located_orders_by_agent(
+        self,
+        agente_codigo,
+        mobile_agent,
+        data
+    ) -> list:
         data_goon = []
-
         try:
-            client = Client(
-                "https://ws.goon.mobi/webservices/keeplefieldintegration.asmx?wsdl"
+            auth_goon = TokenGoon.objects.get(
+                nome="AUTH_CODE_GET_ALL_LOCATED_ORDERS_BY_AGENT"
             )
+            url_goon = UrlGoon.objects.get(id=1)
+            reques_data = {
+                'authCode': auth_goon.auth,
+                'clientCode': auth_goon.cliente,
+                'agenteCodigo': agente_codigo,
+                'mobileAgentCodeSource': mobile_agent,
+                'dataFinalizacaoCancelamento': data,
+            }
+
+            client = Client(url_goon.url)
             response = client.service.GetAllocatedOrdersByAgent(**reques_data)
-        
+
             dicionario = json.loads(response)
 
             if not dicionario["success"]:
                 return dicionario["success"]
-            
+
             xml = dicionario["answersXML"].replace('<>', '-')
 
             data_goon = self.parse_goon_xml_to_dict(xml)
 
-            return data_goon
-
         except Exception as e:
             print(f"Error getting get all located: {e}")
-            return False
-        
+
+        return data_goon

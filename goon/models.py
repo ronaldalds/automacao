@@ -2,7 +2,16 @@ from django.db import models
 
 
 # Create your models here.
-class Api(models.Model):
+class TokenGoon(models.Model):
     nome = models.CharField(max_length=128)
     auth = models.CharField(max_length=128)
-    cliente_code = models.CharField(max_length=128)
+    cliente = models.CharField(max_length=128)
+
+
+class StatusGoon(models.Model):
+    nome = models.CharField(max_length=64)
+    descricao = models.CharField(max_length=128)
+
+
+class UrlGoon(models.Model):
+    url = models.URLField()

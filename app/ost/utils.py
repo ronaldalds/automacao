@@ -4,10 +4,10 @@ import time
 import requests
 import telebot
 from dotenv import dotenv_values
-from .models import SlaOS
-from .models import TipoOS
-from .models import TempoSLA
-from .models import InformacaoOS
+from .models import SlaOs
+from .models import TipoOs
+from .models import TempoSla
+from .models import InformacaoOs
 from .models import Tecnico
 from .models import Log
 from .models import TecnicoMensagem
@@ -40,7 +40,7 @@ class Notificacao:
             print("Error na request da rota agenda os")
             time.sleep(60)
             self.agenda_os()
-        
+
         if response.status_code == 200:
             return response.json()
         else:
@@ -49,13 +49,13 @@ class Notificacao:
             self.agenda_os()
 
     def informacaoes(self, tipo_os) -> list[dict]:
-        tipo = TipoOS.objects.filter(tipo=tipo_os).first()
-        tipo_padrao = TipoOS.objects.filter(tipo="PADRÃO").first()
-        informacao = InformacaoOS.objects.filter(id_tipo_os=tipo).values("nome")
+        tipo = TipoOs.objects.filter(tipo=tipo_os).first()
+        tipo_padrao = TipoOs.objects.filter(tipo="PADRÃO").first()
+        informacao = InformacaoOs.objects.filter(id_tipo_os=tipo).values("nome")
         if informacao:
             return informacao
         else:
-            return InformacaoOS.objects.filter(id_tipo_os=tipo_padrao).values("nome")
+            return InformacaoOs.objects.filter(id_tipo_os=tipo_padrao).values("nome")
 
     def verificar_agenda_os(self) -> None:
         agendamentos = self.agenda_os()
@@ -110,15 +110,15 @@ class Notificacao:
             self.agenda_tecnico(tecnico)
 
     def sla_os(self, Tipo_OS) -> int:
-        tipo = TipoOS.objects.filter(tipo=Tipo_OS).first()
-        status=SlaOS.objects.filter(id_tipo_os=tipo, status=True).first()
+        tipo = TipoOs.objects.filter(tipo=Tipo_OS).first()
+        status=SlaOs.objects.filter(id_tipo_os=tipo, status=True).first()
         if status:
             return status.sla
         else:
             return -1
 
     def tempo_de_aviso(self) -> list:
-        tempo_aviso = TempoSLA.objects.all().values("sla")
+        tempo_aviso = TempoSla.objects.all().values("sla")
         return sorted([x.get("sla") for x in tempo_aviso], reverse=True)
 
     def notificar(self, Cod_OS, ID_Tecnico, Tempo_Aviso, Nome_Tecnico: str, Tipo_OS, Data_Abertura, Chat_ID: int) -> None:

@@ -14,6 +14,7 @@ from concurrent.futures import ThreadPoolExecutor
 @admin.register(ThreadCancelamento)
 class ThreadAdmin(admin.ModelAdmin):
     list_display = (
+        'id',
         'numero_thread',
     )
     list_display_links = list_display
@@ -28,7 +29,6 @@ class CancelamentoResource(resources.ModelResource):
             'mk',
             'contrato',
             'cod_pessoa',
-            'documento_codigo',
             'tipo_os',
             'defeito',
             'profile',
@@ -38,7 +38,6 @@ class CancelamentoResource(resources.ModelResource):
             'grupo_atendimento_os',
             'incidencia_de_multa',
             'data_vcto_multa_contratual',
-            'data_a_cancelar',
             'motivo_cancelamento',
             'valor_multa',
         )
@@ -59,7 +58,10 @@ def processo_cancelamento(item: Cancelamento):
 class CancelamentoAdmin(ImportExportMixin, VersionAdmin):
     def cancelar(modeladmin, request, queryset: list[Cancelamento]):
         limite_threads = ThreadCancelamento.objects.get(pk=1).numero_thread
-        print(limite_threads)
+        queryset = queryset.filter(status=False, processamento=False)
+        for query in queryset:
+            query.processamento = True
+            query.save()
 
         def execute_cancelar(queryset):
             with ThreadPoolExecutor(max_workers=limite_threads) as executor:
@@ -82,8 +84,6 @@ class CancelamentoAdmin(ImportExportMixin, VersionAdmin):
         'mk',
         'contrato',
         'cod_pessoa',
-        'conexao',
-        'documento_codigo',
         'tipo_os',
         'defeito',
         'profile',
@@ -93,15 +93,12 @@ class CancelamentoAdmin(ImportExportMixin, VersionAdmin):
         'grupo_atendimento_os',
         'incidencia_de_multa',
         'data_vcto_multa_contratual',
-        'data_a_cancelar',
-        'loja',
-        'onu_serial',
-        'status',
         'motivo_cancelamento',
-        'os_cancelamento_30d',
         'valor_multa',
+        'status',
+        'processamento',
         'observacao',
     )
     list_display_links = list_display
-    list_filter = ('status', 'mk',)
-    search_fields = ['contrato', 'cod_pessoa', 'conexao', 'documento_codigo']
+    list_filter = ('mk', 'status', 'processamento')
+    search_fields = ['contrato', 'cod_pessoa',]

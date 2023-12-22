@@ -41,18 +41,18 @@ def cronos_admin_login(request):
             }
         )
 
-        grupo_cronos = requests.post(
-            "https://api.cronos.online.psi.br/api/token",
-            data={
-                'token': response.json().get("Token")
-            }
-        )
-
-        new_group, _ = Group.objects.get_or_create(
-            name=grupo_cronos.json().get("grupo")
-        )
-
         if response.status_code == 200:
+            grupo_cronos = requests.post(
+                "https://api.cronos.online.psi.br/api/token",
+                data={
+                    'token': response.json().get("Token")
+                }
+            )
+
+            new_group, _ = Group.objects.get_or_create(
+                name=grupo_cronos.json().get("grupo")
+            )
+
             user = user = User.objects.filter(username=username).first()
             if user is not None:
                 auth_user = authenticate(

@@ -3,24 +3,32 @@ from django.db import models
 
 # Create your models here.
 class OrdemServico(models.Model):
-    solicitante = models.CharField(max_length=128)
     mk = models.IntegerField()
-    contrato = models.IntegerField()
+    cod_pessoa = models.IntegerField()
     qtd_conexoes = models.IntegerField()
     conexao_associada = models.IntegerField()
-    qtd_atendimentos = models.IntegerField()
-    os_cancelamento_ou_recolhimento = models.BooleanField(default=False)
+    os_cancelamento_ou_recolhimento = models.CharField(max_length=1)
     documento = models.CharField(max_length=18)
     tipo_os = models.CharField(max_length=128)
-    planos_de_contas = models.CharField(max_length=128)
     grupo_atendimento_os = models.CharField(max_length=128)
     detalhes_os = models.CharField(max_length=512)
-    atraso_max = models.IntegerField()
-    loja = models.CharField(max_length=128)
-    status_recolhimento = models.BooleanField(default=False)
+    nivel_sla = models.CharField(max_length=128)
+    status = models.BooleanField(default=False)
+    processamento = models.BooleanField(default=False)
+    observacao = models.TextField(null=True, blank=True)
+
+    def __str__(self) -> str:
+        return self.documento
+
+    class Meta:
+        verbose_name_plural = 'Ordens de Serviço'
 
 
 class LimiteOS(models.Model):
     mk = models.IntegerField()
-    loja = models.CharField(max_length=128)
+    grupo_atendimento_os = models.CharField(max_length=128)
     limite = models.IntegerField()
+
+
+class ThreadOs(models.Model):
+    numero_thread = models.IntegerField()
