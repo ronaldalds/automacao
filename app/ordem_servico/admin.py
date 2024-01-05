@@ -1,14 +1,14 @@
 from django.contrib import admin
-from .processo import Ordem
-from .models import OrdemServico
-from threading import Thread
-from import_export import resources
 from django.contrib import messages
-from .models import ThreadOs
-from reversion.admin import VersionAdmin
-from import_export.admin import ImportExportMixin
 from django.core.exceptions import ValidationError
 from concurrent.futures import ThreadPoolExecutor
+from threading import Thread
+from reversion.admin import VersionAdmin
+from import_export import resources
+from import_export.admin import ImportExportMixin
+from .processo import Ordem
+from .models import OrdemServico
+from .models import ThreadOs
 
 
 @admin.register(ThreadOs)
@@ -27,7 +27,6 @@ class OsResource(resources.ModelResource):
     def before_import_row(self, row, **kwargs):
         mandatory_fields = (
             'mk',
-            'contrato',
             'conexao_associada',
             'documento',
             'grupo_atendimento_os',
@@ -74,11 +73,20 @@ class OrdemServicoAdmin(ImportExportMixin, VersionAdmin):
     list_display = (
         'id',
         'mk',
-        'contrato',
+        'cod_pessoa',
+        'qtd_conexoes',
         'conexao_associada',
+        'os_cancelamento_ou_recolhimento',
         'documento',
+        'tipo_os',
         'grupo_atendimento_os',
+        'detalhes_os',
+        'nivel_sla',
         'status',
+        'processamento',
+        'observacao',
+        'created_at',
     )
-    list_filter = ('mk', 'status',)
-    search_fields = ['contrato', 'conexao_associada', 'grupo_atendimento_os',]
+    list_filter = ('mk', 'status', 'grupo_atendimento_os')
+    search_fields = ['contrato', 'conexao_associada']
+    readonly_fields = ('created_at',)

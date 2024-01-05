@@ -59,17 +59,18 @@ INSTALLED_APPS = [
     'mk',
     'desk',
     'goon',
-    # 'telegram',
-    # 'mkat',
+    'avin',
+    'telegram',
+    'mkat',
     # 'cronos',
 
     # APP
     # 'app.dashboard',
-    'app.cancelamento',
-    'app.ordem_servico',
-    'app.goontodesk',
+    # 'app.cancelamento',
+    # 'app.ordem_servico',
+    # 'app.goontodesk',
     # 'app.spc',
-    # 'app.ost',
+    'app.ost',
     # 'app.x9',
 ]
 

@@ -1,14 +1,14 @@
-from threading import Thread
-from .processo import Cancelar
 from django.contrib import admin
-from .models import Cancelamento
-from import_export import resources
 from django.contrib import messages
-from .models import ThreadCancelamento
-from reversion.admin import VersionAdmin
-from import_export.admin import ImportExportMixin
 from django.core.exceptions import ValidationError
 from concurrent.futures import ThreadPoolExecutor
+from threading import Thread
+from reversion.admin import VersionAdmin
+from import_export import resources
+from import_export.admin import ImportExportMixin
+from .processo import Cancelar
+from .models import Cancelamento
+from .models import ThreadCancelamento
 
 
 @admin.register(ThreadCancelamento)
@@ -98,7 +98,9 @@ class CancelamentoAdmin(ImportExportMixin, VersionAdmin):
         'status',
         'processamento',
         'observacao',
+        'created_at',
     )
     list_display_links = list_display
-    list_filter = ('mk', 'status', 'processamento')
+    list_filter = ('mk', 'status', 'processamento', 'created_at')
     search_fields = ['contrato', 'cod_pessoa',]
+    readonly_fields = ('created_at',)

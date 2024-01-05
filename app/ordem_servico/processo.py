@@ -1,16 +1,16 @@
 import re
 from time import sleep
+from datetime import datetime
+from .models import OrdemServico
+from selenium.webdriver.common.keys import Keys
 from mk.coin.coin import Workspace
 from mk.aside.aside_workspace import OsPainel
-from selenium.webdriver.common.keys import Keys
-from .models import OrdemServico
-from datetime import datetime
-from mk.mk_drive import Mk
+from mk.drive import Mk
 from mk.models import (
-    NivelSLA,
-    TipoOS,
-    GrupoAtendimento,
     Login,
+    TipoOS,
+    NivelSLA,
+    GrupoAtendimento,
 )
 
 

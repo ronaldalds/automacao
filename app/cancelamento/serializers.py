@@ -10,7 +10,6 @@ class CancelamentoSerializer(serializers.ModelSerializer):
         fields = [
             'id',
             'mk',
-            'documento_codigo',
             'grupo_atendimento_os',
             'status',
             'observacao',

@@ -1,6 +1,6 @@
 from django.db import models
 
-# Create your models here.
+
 class Spc(models.Model):
     solicitante = models.CharField(max_length=128)
     cod_cliente = models.IntegerField()

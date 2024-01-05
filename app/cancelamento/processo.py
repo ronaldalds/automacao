@@ -1,16 +1,16 @@
-from mk.mk_drive import Mk
 from datetime import datetime
-from mk.coin.coin import Financeiro
-from selenium.webdriver.common.keys import Keys
-from mk.aside.aside_financeiro import PainelDoCliente
 from .models import Cancelamento
+from selenium.webdriver.common.keys import Keys
+from mk.drive import Mk
+from mk.coin.coin import Financeiro
+from mk.aside.aside_financeiro import PainelDoCliente
 from mk.models import (
-    Profile,
+    Login,
     TipoOS,
     MotivoCancelamento,
     GrupoAtendimento,
     Defeito,
-    Login,
+    Profile,
 )
 
 

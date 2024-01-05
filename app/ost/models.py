@@ -1,22 +1,10 @@
 from django.db import models
 
 
-class Tecnico(models.Model):
-    id = models.BigAutoField(primary_key=True)
-    nome = models.CharField(max_length=200, null=False)
-    chat_id = models.IntegerField(null=False)
-    status = models.BooleanField(default=True)
-
-    class Meta:
-        verbose_name_plural = 'Tecnicos'
-
-    def __str__(self) -> str:
-        return self.nome
-
-
 class TipoOs(models.Model):
-    id = models.BigAutoField(primary_key=True)
-    tipo = models.CharField(max_length=300, null=False)
+    tipo = models.CharField(max_length=300)
+    sla = models.IntegerField()
+    status = models.BooleanField(default=True)
 
     def __str__(self) -> str:
         return str(self.tipo)
@@ -26,13 +14,13 @@ class TipoOs(models.Model):
 
 
 class TecnicoMensagem(models.Model):
-    id = models.BigAutoField(primary_key=True)
-    chat_id = models.ForeignKey(Tecnico, on_delete=models.CASCADE)
+    nome_tecnico = models.CharField(max_length=128)
+    chat_id = models.IntegerField()
     mensagem = models.TextField()
-    sla = models.IntegerField(null=False, default=0)
-    cod_os = models.IntegerField(null=False, default=0)
+    sla = models.IntegerField()
+    cod_os = models.IntegerField()
     data_envio = models.DateTimeField(auto_now=True)
-    status = models.BooleanField(null=False, default=True)
+    status = models.BooleanField(default=True)
 
     def __str__(self) -> str:
         return str(self.chat_id)
@@ -42,30 +30,18 @@ class TecnicoMensagem(models.Model):
 
 
 class TempoSla(models.Model):
-    id = models.BigAutoField(primary_key=True)
-    sla = models.IntegerField(null=False)
+    sla = models.IntegerField(primary_key=True, unique=True)
 
     def __str__(self) -> str:
-        return str(self.sla)
+        return f"{self.sla}"
 
     class Meta:
         verbose_name_plural = 'S.L.A.'
 
 
-class SlaOs(models.Model):
-    id = models.BigAutoField(primary_key=True)
-    id_tipo_os = models.ForeignKey(TipoOs, on_delete=models.CASCADE)
-    sla = models.IntegerField(null=False)
-    status = models.BooleanField(default=True, null=False)
-
-    class Meta:
-        verbose_name_plural = 'S.L.A. O.S.'
-
-
 class InformacaoOs(models.Model):
-    id = models.BigAutoField(primary_key=True)
     id_tipo_os = models.ForeignKey(TipoOs, on_delete=models.CASCADE)
-    nome = models.CharField(max_length=300, null=False)
+    nome = models.CharField(max_length=300)
 
     def __str__(self) -> str:
         return f"{self.nome} - {self.id_tipo_os}"
@@ -75,8 +51,15 @@ class InformacaoOs(models.Model):
 
 
 class Log(models.Model):
-    id = models.BigAutoField(primary_key=True)
     data_envio = models.DateTimeField(auto_now=True)
 
     class Meta:
         verbose_name_plural = 'Logs'
+
+
+class ErrorOs(models.Model):
+    os = models.CharField(max_length=32)
+    tipo = models.CharField(max_length=32)
+    operador = models.CharField(max_length=32)
+    detalhe = models.CharField(max_length=32)
+    created_at = models.DateTimeField(auto_now=True)

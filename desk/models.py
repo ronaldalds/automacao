@@ -7,17 +7,11 @@ class TokenDesk(models.Model):
     ambiente = models.CharField(max_length=128)
 
 
-class EndPointDesk(models.Model):
-    grupo = models.CharField(max_length=128)
-    acao = models.CharField(max_length=128)
-    url = models.URLField()
-
-
 class StatusDesk(models.Model):
     nome = models.CharField(max_length=128)
-    descricao = models.CharField(max_length=128)
+    id = models.CharField(max_length=128, primary_key=True, unique=True)
 
 
 class FormaAtendimentoDesk(models.Model):
     nome = models.CharField(max_length=128)
-    descricao = models.CharField(max_length=128)
+    id = models.CharField(max_length=128, primary_key=True, unique=True)

@@ -1,10 +1,15 @@
 from django.db import models
 
 
-# Create your models here.
 class UserTelegram(models.Model):
-    id = models.IntegerField(primary_key=True)
+    FUNCAO = [
+        (1, "Técnico"),
+        (2, "Outros")
+    ]
+    id = models.IntegerField(primary_key=True, unique=True)
     nome = models.CharField(max_length=128)
+    funcao = models.IntegerField(choices=FUNCAO, default=2)
+    status = models.BooleanField(default=True)
 
 
 class ApiTelegram(models.Model):
@@ -12,6 +17,6 @@ class ApiTelegram(models.Model):
     hash = models.CharField(max_length=128)
 
 
-class Bot(models.Model):
+class BotTelegram(models.Model):
     nome = models.CharField(max_length=128)
     token = models.CharField(max_length=128)

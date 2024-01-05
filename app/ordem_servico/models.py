@@ -16,6 +16,7 @@ class OrdemServico(models.Model):
     status = models.BooleanField(default=False)
     processamento = models.BooleanField(default=False)
     observacao = models.TextField(null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self) -> str:
         return self.documento
