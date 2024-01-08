@@ -16,7 +16,6 @@ __localcode
 __pycache__
 db.sqlite3
 *.json
-a.py
 
 # Backup files #
 *.bak
