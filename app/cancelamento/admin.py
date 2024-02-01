@@ -54,18 +54,19 @@ def processo_cancelamento(item: Cancelamento):
     cancelamento.cancelar()
 
 
+def execute_cancelar(queryset):
+    limite_threads = ThreadCancelamento.objects.get(pk=1).numero_thread
+    with ThreadPoolExecutor(max_workers=limite_threads) as executor:
+        executor.map(processo_cancelamento, queryset)
+
+
 @admin.register(Cancelamento)
 class CancelamentoAdmin(ImportExportMixin, VersionAdmin):
     def cancelar(modeladmin, request, queryset: list[Cancelamento]):
-        limite_threads = ThreadCancelamento.objects.get(pk=1).numero_thread
         queryset = queryset.filter(status=False, processamento=False)
         for query in queryset:
             query.processamento = True
             query.save()
-
-        def execute_cancelar(queryset):
-            with ThreadPoolExecutor(max_workers=limite_threads) as executor:
-                executor.map(processo_cancelamento, queryset)
 
         # Criando e iniciando o thread
         thread = Thread(target=execute_cancelar, args=(queryset,))

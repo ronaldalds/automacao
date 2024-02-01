@@ -1,4 +1,4 @@
-from desk.drive import Desk
+from utils.desk.drive import Desk
 from django.shortcuts import render
 
 

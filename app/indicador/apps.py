@@ -6,7 +6,7 @@ class IndicadorConfig(AppConfig):
     name = 'app.indicador'
 
     def ready(self) -> None:
-        from desk.drive import Desk
+        from utils.desk.drive import Desk
         from datetime import datetime
         from .models import Chamado
         from .models import Interacao
@@ -85,7 +85,7 @@ class IndicadorConfig(AppConfig):
         if jobs:
             sheduler.shutdown()
         sheduler.configure(timezone="america/fortaleza")
-        sheduler.add_job(carga_chamado, 'interval', minutes=10)
-        sheduler.add_job(carga_interacao, 'interval', minutes=10)
+        sheduler.add_job(carga_chamado, 'interval', minutes=12)
+        sheduler.add_job(carga_interacao, 'interval', minutes=14)
 
         sheduler.start()

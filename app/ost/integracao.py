@@ -2,8 +2,8 @@ from datetime import datetime, timedelta
 import time
 import requests
 import telebot
-from mkat.models import UserMkat
-from telegram.models import UserTelegram, BotTelegram
+from utils.mkat.models import UserMkat
+from utils.telegram.models import UserTelegram, BotTelegram
 from .models import (
     TipoOs,
     TempoSla,
@@ -72,15 +72,14 @@ class Notificacao:
 
     def informacaoes(self, tipo_os) -> list[InformacaoOs]:
         tipo = TipoOs.objects.filter(tipo=tipo_os).first()
-        tipo_padrao = TipoOs.objects.filter(tipo="PADRÃO").first()
         informacao = InformacaoOs.objects.filter(
             id_tipo_os=tipo
         )
-        if informacao.name:
+        if informacao:
             return informacao
         else:
             return InformacaoOs.objects.filter(
-                id_tipo_os=tipo_padrao
+                id_tipo_os="PADRÃO"
             )
 
     def verificar_agenda_os(self) -> None:
@@ -106,7 +105,7 @@ class Notificacao:
         tipo_os: dict = ordem_servico.get("tipo_os", {})
         motivo: str = ordem_servico.get("motivo", "")
         descricao_tipo_os: str = tipo_os.get("descricao", "PADRÃO")
-        informacoes_os = self.informacaoes(tipo_os=descricao_tipo_os)
+        informacoes_os = self.informacaoes(descricao_tipo_os)
         cod = ordem_servico.get('cod', '')
         operador_abertura = ordem_servico.get('operador_abertura', '')
 
@@ -219,7 +218,7 @@ class Notificacao:
         )
 
         for tecnico in Lista_Tecnicos:
-            # print(f"id: {tecnico.id} Nome: {tecnico.nome}")
+            print(f"id: {tecnico.id} Nome: {tecnico.nome}")
             Agenda_Tecnico = self.agenda_tecnico(tecnico.nome)
             tempo_aviso = self.tempo_de_aviso()
 

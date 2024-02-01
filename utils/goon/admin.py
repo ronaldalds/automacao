@@ -17,6 +17,6 @@ class TokenGoonAdmin(admin.ModelAdmin):
 class StatusGoonAdmin(admin.ModelAdmin):
     list_display = (
         'nome',
-        'id',
+        'descricao',
     )
     list_display_links = list_display

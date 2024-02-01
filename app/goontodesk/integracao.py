@@ -1,9 +1,9 @@
 import re
 from datetime import datetime
-from goon.drive import Goon
-from goon.models import StatusGoon
-from desk.drive import Desk
-from desk.models import StatusDesk, FormaAtendimentoDesk
+from utils.goon.drive import Goon
+from utils.goon.models import StatusGoon
+from utils.desk.drive import Desk
+from utils.desk.models import StatusDesk, FormaAtendimentoDesk
 from .models import OsGoon, StatusInfo
 
 

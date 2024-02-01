@@ -9,4 +9,4 @@ class TokenGoon(models.Model):
 
 class StatusGoon(models.Model):
     nome = models.CharField(max_length=64)
-    id = models.CharField(max_length=128, primary_key=True, unique=True)
+    descricao = models.CharField(max_length=128, primary_key=True, unique=True)

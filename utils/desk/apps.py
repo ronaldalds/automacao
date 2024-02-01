@@ -1,6 +1,6 @@
 from django.apps import AppConfig
 
 
-class MkConfig(AppConfig):
+class DeskConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
-    name = 'mk'
+    name = 'utils.desk'

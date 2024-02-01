@@ -1,10 +1,10 @@
 from datetime import datetime
 from .models import Cancelamento
 from selenium.webdriver.common.keys import Keys
-from mk.drive import Mk
-from mk.coin.coin import Financeiro
-from mk.aside.aside_financeiro import PainelDoCliente
-from mk.models import (
+from utils.mk.drive import Mk
+from utils.mk.coin.coin import Financeiro
+from utils.mk.aside.aside_financeiro import PainelDoCliente
+from utils.mk.models import (
     Login,
     TipoOS,
     MotivoCancelamento,
@@ -133,7 +133,7 @@ class Cancelar:
 
         # clique duplo no cadastro do cliente
         try:
-            self.sbrowser.iframeGridRes(
+            self.browser.iframeGridRes(
                 self.financeiro,
                 self.painel_do_cliente
             )
@@ -297,7 +297,7 @@ class Cancelar:
         # clique checkbox cancelar contrato
         try:
             self.browser.click(
-                '//div[@class="HTMLTabContainer"]/div[6]/div[17]/input[@type="checkbox"]'
+                '//div[@class="HTMLTabContainer"]/div[6]/div[19]/input[@type="checkbox"]'
             )
         except Exception as e:
             return self.message_error(
@@ -374,7 +374,7 @@ class Cancelar:
         try:
             self.browser.write(
                 '//*[@title="Valor do lançamento"]',
-                self.conexao.valor_multa
+                str(self.conexao.valor_multa.to_integral_value())
             )
         except Exception as e:
             return self.message_error(f"Error valor da multa: {e}")
@@ -383,7 +383,7 @@ class Cancelar:
         try:
             self.browser.write(
                 '//*[@title="Data de vencimento da conta."]',
-                self.conexao.data_vcto_multa_contratual
+                self.conexao.data_vcto_multa_contratual.replace("/", "")
             )
         except Exception as e:
             return self.message_error(f"Error vencimento da multa: {e}")

@@ -1,7 +1,6 @@
 from rest_framework import serializers
-from .models import *
+from .models import Alerta
 
-# Serializers define the API representation.
 
 class AlertaSerializer(serializers.ModelSerializer):
     class Meta:

@@ -55,22 +55,24 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'drf_yasg',
 
-    # Sistemas
-    'mk',
-    'desk',
-    'goon',
-    'avin',
-    'telegram',
-    'mkat',
-    # 'cronos',
+    # Utils
+    'utils.mk',
+    'utils.desk',
+    'utils.goon',
+    'utils.avin',
+    'utils.telegram',
+    'utils.mkat',
+    'utils.cronos',
 
     # APP
-    # 'app.dashboard',
+    'app.autonoc',
     # 'app.cancelamento',
+    'app.dashboard',
+    'app.goontodesk',
+    # 'app.indicador',
     # 'app.ordem_servico',
-    # 'app.goontodesk',
+    # 'app.ost',
     # 'app.spc',
-    'app.ost',
     # 'app.x9',
 ]
 
@@ -132,19 +134,19 @@ DATABASES = {
 }
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
-
+str_pass_django = "django.contrib.auth.password_validation"
 AUTH_PASSWORD_VALIDATORS = [
     {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+        'NAME': f'{str_pass_django}.UserAttributeSimilarityValidator',
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+        'NAME': f'{str_pass_django}.MinimumLengthValidator',
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
+        'NAME': f'{str_pass_django}.CommonPasswordValidator',
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
+        'NAME': f'{str_pass_django}.NumericPasswordValidator',
     },
 ]
 

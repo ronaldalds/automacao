@@ -9,7 +9,10 @@ class OsGoon(models.Model):
         blank=True
     )
     descricao = models.CharField(max_length=256)
-    tipo_servico = models.IntegerField()
+    tipo_servico = models.IntegerField(
+        null=True,
+        blank=True
+    )
 
     def __str__(self) -> str:
         return f"{self.numero_os}"

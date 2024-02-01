@@ -1,6 +1,6 @@
 from django.apps import AppConfig
 
 
-class MkatConfig(AppConfig):
+class CronosConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
-    name = 'mkat'
+    name = 'utils.cronos'
