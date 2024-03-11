@@ -1,9 +1,9 @@
-from django.contrib import admin
+from django.contrib.admin import ModelAdmin, register
 from .models import TokenGoon, StatusGoon
 
 
-@admin.register(TokenGoon)
-class TokenGoonAdmin(admin.ModelAdmin):
+@register(TokenGoon)
+class TokenGoonAdmin(ModelAdmin):
     list_display = (
         'id',
         'nome',
@@ -13,8 +13,8 @@ class TokenGoonAdmin(admin.ModelAdmin):
     list_display_links = list_display
 
 
-@admin.register(StatusGoon)
-class StatusGoonAdmin(admin.ModelAdmin):
+@register(StatusGoon)
+class StatusGoonAdmin(ModelAdmin):
     list_display = (
         'nome',
         'descricao',

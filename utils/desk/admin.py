@@ -1,4 +1,4 @@
-from django.contrib import admin
+from django.contrib.admin import ModelAdmin, register
 from .models import (
     TokenDesk,
     StatusDesk,
@@ -6,8 +6,8 @@ from .models import (
 )
 
 
-@admin.register(TokenDesk)
-class TokenDeskAdmin(admin.ModelAdmin):
+@register(TokenDesk)
+class TokenDeskAdmin(ModelAdmin):
     list_display = (
         'id',
         'nome',
@@ -17,8 +17,8 @@ class TokenDeskAdmin(admin.ModelAdmin):
     list_display_links = list_display
 
 
-@admin.register(StatusDesk)
-class StatusDeskAdmin(admin.ModelAdmin):
+@register(StatusDesk)
+class StatusDeskAdmin(ModelAdmin):
     list_display = (
         'nome',
         'id',
@@ -26,8 +26,8 @@ class StatusDeskAdmin(admin.ModelAdmin):
     list_display_links = list_display
 
 
-@admin.register(FormaAtendimentoDesk)
-class FormaAtendimentoDeskAdmin(admin.ModelAdmin):
+@register(FormaAtendimentoDesk)
+class FormaAtendimentoDeskAdmin(ModelAdmin):
     list_display = (
         'nome',
         'id',

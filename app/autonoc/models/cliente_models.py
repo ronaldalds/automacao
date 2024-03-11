@@ -14,6 +14,7 @@ class Cliente(models.Model):
     cep = models.CharField(max_length=128)
     telefone = models.CharField(max_length=128)
     email = models.CharField(max_length=128)
+    ativo = models.BooleanField(default=True)
 
     class Meta:
         verbose_name_plural = "Clientes"

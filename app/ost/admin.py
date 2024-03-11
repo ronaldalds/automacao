@@ -1,4 +1,4 @@
-from django.contrib import admin
+from django.contrib.admin import ModelAdmin, register
 from .models import (
     TipoOs,
     TecnicoMensagem,
@@ -9,14 +9,14 @@ from .models import (
 )
 
 
-@admin.register(TipoOs)
-class TipoOSAdmin(admin.ModelAdmin):
+@register(TipoOs)
+class TipoOSAdmin(ModelAdmin):
     list_display = ('id', 'tipo', 'sla', 'status')
     search_fields = ['tipo',]
 
 
-@admin.register(TecnicoMensagem)
-class TecnicoMensagemAdmin(admin.ModelAdmin):
+@register(TecnicoMensagem)
+class TecnicoMensagemAdmin(ModelAdmin):
     list_display = (
         'id',
         'nome_tecnico',
@@ -30,26 +30,26 @@ class TecnicoMensagemAdmin(admin.ModelAdmin):
     search_fields = ['chat_id',]
 
 
-@admin.register(TempoSla)
-class TempoSLAAdmin(admin.ModelAdmin):
+@register(TempoSla)
+class TempoSLAAdmin(ModelAdmin):
     list_display = ('sla',)
     search_fields = ['sla',]
 
 
-@admin.register(InformacaoOs)
-class InformacaoOSAdmin(admin.ModelAdmin):
+@register(InformacaoOs)
+class InformacaoOSAdmin(ModelAdmin):
     list_display = ('id', 'id_tipo_os', 'nome')
     list_filter = ('id_tipo_os',)
 
 
-@admin.register(Log)
-class LogAdmin(admin.ModelAdmin):
+@register(Log)
+class LogAdmin(ModelAdmin):
     list_display = ('id', 'data_envio')
     list_filter = ('data_envio',)
 
 
-@admin.register(ErrorOs)
-class ErrorOsAdmin(admin.ModelAdmin):
+@register(ErrorOs)
+class ErrorOsAdmin(ModelAdmin):
     list_display = (
         'id',
         'os',

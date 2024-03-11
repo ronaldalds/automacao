@@ -1,8 +1,7 @@
-from datetime import datetime, timedelta
 import time
-import requests
 import telebot
-from utils.mkat.models import UserMkat
+from datetime import datetime
+from utils.mkat.drive import Mkat
 from utils.telegram.models import UserTelegram, BotTelegram
 from .models import (
     TipoOs,
@@ -15,61 +14,6 @@ from .models import (
 
 
 class Notificacao:
-    def __init__(self):
-        self.__url_agenda_tecnico = "https://mkat.online.psi.br/agenda/tecnico"
-        self.__url_agenda_os = "https://mkat.online.psi.br/agenda/os"
-
-    def agenda_os(self):
-        try:
-            auth = UserMkat.objects.filter(nome="TOKEN_MKAT").first()
-            data_json = {
-                "token": auth.token,
-                "de": datetime.now().strftime('%Y-%m-%d'),
-                "ate": (
-                    datetime.now() + timedelta(days=7)
-                ).strftime('%Y-%m-%d'),
-                "mk": 1
-            }
-
-            response = requests.post(
-                self.__url_agenda_os,
-                json=data_json,
-            )
-
-            if response.status_code == 200:
-                return response.json()
-
-        except Exception as e:
-            print(f"Error agenda os: {e}")
-            time.sleep(60)
-            self.agenda_os()
-
-    def agenda_tecnico(self, tecnico) -> list[dict]:
-        try:
-            auth = UserMkat.objects.filter(nome="TOKEN_MKAT").first()
-            data_json = {
-                "token": auth.token,
-                "tecnico": tecnico,
-                "de": datetime.now().strftime('%Y-%m-%d'),
-                "ate": (
-                    datetime.now() + timedelta(days=1)
-                ).strftime('%Y-%m-%d'),
-                "mk": 1
-            }
-
-            response = requests.post(
-                self.__url_agenda_tecnico,
-                json=data_json,
-            )
-
-            if response.status_code == 200:
-                return response.json()
-
-        except Exception as e:
-            print(f"Error agenda tecnico: {e}")
-            time.sleep(60)
-            self.agenda_tecnico(tecnico)
-
     def informacaoes(self, tipo_os) -> list[InformacaoOs]:
         tipo = TipoOs.objects.filter(tipo=tipo_os).first()
         informacao = InformacaoOs.objects.filter(
@@ -79,11 +23,12 @@ class Notificacao:
             return informacao
         else:
             return InformacaoOs.objects.filter(
-                id_tipo_os="PADRÃO"
+                id_tipo_os=TipoOs.objects.filter(tipo="PADRAO").first().pk
             )
 
     def verificar_agenda_os(self) -> None:
-        agendamentos = self.agenda_os()
+        mkat = Mkat()
+        agendamentos = mkat.agenda_os()
         for agenda in agendamentos:
             ordem_servico: dict = agenda.get("os", {})
             encerrado: bool = ordem_servico.get("encerrado", False)
@@ -104,11 +49,10 @@ class Notificacao:
         ).first().id
         tipo_os: dict = ordem_servico.get("tipo_os", {})
         motivo: str = ordem_servico.get("motivo", "")
-        descricao_tipo_os: str = tipo_os.get("descricao", "PADRÃO")
+        descricao_tipo_os: str = tipo_os.get("descricao", "PADRAO")
         informacoes_os = self.informacaoes(descricao_tipo_os)
         cod = ordem_servico.get('cod', '')
         operador_abertura = ordem_servico.get('operador_abertura', '')
-
         for detalhes in informacoes_os:
             msg_os = f"OS {cod} - {descricao_tipo_os}."
             msg_operador = f"Operador {operador_abertura}."
@@ -128,7 +72,6 @@ class Notificacao:
                         detalhe=detalhes.nome
                     )
                     error.save()
-
                 bot_telegram.send_message(
                     chat_id=grupo,
                     text=msg
@@ -192,7 +135,6 @@ class Notificacao:
 
                 tm.status = True
                 tm.save()
-
             except Exception:
                 bot_telegram.send_message(
                     chat_id=UserTelegram.objects.filter(
@@ -202,7 +144,6 @@ class Notificacao:
                 )
                 tm.status = False
                 tm.save()
-
             time.sleep(7)
 
     def diferenca_hora(self, data_abertura: datetime):
@@ -216,13 +157,12 @@ class Notificacao:
             funcao=1,
             status=True
         )
-
         for tecnico in Lista_Tecnicos:
             print(f"id: {tecnico.id} Nome: {tecnico.nome}")
-            Agenda_Tecnico = self.agenda_tecnico(tecnico.nome)
+            mkat = Mkat()
+            agenda_Tecnico = mkat.agenda_tecnico(tecnico.nome)
             tempo_aviso = self.tempo_de_aviso()
-
-            for agenda in Agenda_Tecnico:
+            for agenda in agenda_Tecnico:
                 data_obj = datetime.strptime(
                     agenda['os']['data_abertura'],
                     "%Y-%m-%dT%H:%M:%S.%fZ"

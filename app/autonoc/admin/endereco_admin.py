@@ -1,22 +1,29 @@
-from django.contrib import admin
+from django.contrib.admin import register
 from reversion.admin import VersionAdmin
 from import_export.admin import ImportExportMixin
-from ..models import *
+from ..models import (
+    Operacao,
+    Estado,
+    Cidade
+)
 
-@admin.register(Operacao)
+
+@register(Operacao)
 class OperacaoAdmin(ImportExportMixin, VersionAdmin):
     list_display = ('id', 'nome')
     list_display_links = list_display
     search_fields = ['nome']
 
-@admin.register(Estado)
+
+@register(Estado)
 class EstadoAdmin(ImportExportMixin, VersionAdmin):
     list_display = ('id', 'nome', 'operacao', 'uf')
     list_display_links = list_display
     list_filter = ('operacao',)
     search_fields = ['nome']
 
-@admin.register(Cidade)
+
+@register(Cidade)
 class CidadeAdmin(ImportExportMixin, VersionAdmin):
     list_display = (
         'id',

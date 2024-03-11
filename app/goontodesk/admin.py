@@ -1,9 +1,9 @@
-from django.contrib import admin
+from django.contrib.admin import ModelAdmin, register
 from .models import OsGoon, StatusInfo
 
 
-@admin.register(OsGoon)
-class OsGoonAdmin(admin.ModelAdmin):
+@register(OsGoon)
+class OsGoonAdmin(ModelAdmin):
     list_display = (
         'numero_os',
         'ordem_servico_externa',
@@ -14,8 +14,8 @@ class OsGoonAdmin(admin.ModelAdmin):
     search_fields = ['ordem_servico_externa',]
 
 
-@admin.register(StatusInfo)
-class StatusInfoAdmin(admin.ModelAdmin):
+@register(StatusInfo)
+class StatusInfoAdmin(ModelAdmin):
     list_display = (
         'id',
         'sequencia',

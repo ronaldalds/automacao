@@ -1,9 +1,9 @@
-from django.contrib import admin
+from django.contrib.admin import ModelAdmin, register
 from .models import Alerta
 
 
-@admin.register(Alerta)
-class AlertaAdmin(admin.ModelAdmin):
+@register(Alerta)
+class AlertaAdmin(ModelAdmin):
     list_display = (
         "id",
         "automovel",

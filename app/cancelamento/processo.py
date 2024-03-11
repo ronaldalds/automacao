@@ -123,7 +123,7 @@ class Cancelar:
 
         # clique no resultado de pesquisa avançada
         try:
-            self.browser.iframeGridCancelamento(
+            self.browser.iframeGrid(
                 self.financeiro,
                 self.painel_do_cliente
             )

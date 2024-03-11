@@ -37,7 +37,7 @@ class Desk:
         return None
 
     def authentication(self) -> AuthDTO:
-        chave_desk: str = TokenDesk.objects.get(nome="CHAVE_DESK_ADM")
+        chave_desk = TokenDesk.objects.get(nome="CHAVE_DESK_ADM")
         headers = {"Authorization": chave_desk.operador}
         data_json = {"PublicKey": chave_desk.ambiente}
         response = self._make_request(self.url_auth, headers, data_json)
@@ -46,14 +46,14 @@ class Desk:
             if response.status_code == 200 and (len(response.json()) == 59):
                 auth_dto.token = response.json()
                 auth_dto.status = True
-                return auth_dto
+        return auth_dto
 
     def relatorio(self, id: str) -> dict:
         headers = {"Authorization": self.authentication().token}
         data_json = {"Chave": id}
         response = self._make_request(self.url_relatorio, headers, data_json)
         if (response.status_code == 200) and (response.json().get("root")):
-            return response.json()
+            return response.json().get("root")
         return {}
 
     def interagir_chamado(
@@ -164,15 +164,15 @@ class Desk:
             try:
                 if chamado["CodChamado"] == id_chamado:
                     operadores = self.lista_operador()
-                    operador_chamado = {
+                    opd_ch = {
                         "NomeOperador": chamado["NomeOperador"],
                         "SobrenomeOperador": chamado["SobrenomeOperador"],
                     }
-                    for operador in operadores["root"]:
-                        nome = operador["Nome"] == operador_chamado["NomeOperador"]
-                        sobrenome = operador["Sobrenome"] == operador_chamado["SobrenomeOperador"]
-                        if nome and sobrenome:
-                            return operador["Chave"]
+                    for opd in operadores["root"]:
+                        nome = opd["Nome"] == opd_ch["NomeOperador"]
+                        snome = opd["Sobrenome"] == opd_ch["SobrenomeOperador"]
+                        if nome and snome:
+                            return opd["Chave"]
 
             except Exception as e:
                 print(f"Error: {e}")

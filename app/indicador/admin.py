@@ -1,24 +1,18 @@
-from django.contrib import admin
+from django.contrib.admin import ModelAdmin, register
 from .models import Chamado, Interacao
 
 
-@admin.register(Chamado)
-class ChamadoAdmin(admin.ModelAdmin):
+@register(Chamado)
+class ChamadoAdmin(ModelAdmin):
     list_display = (
         "id",
-        "assunto",
-        "data_criacao",
-        "data_finalizacao",
         "nome_categoria",
         "nome_operador",
-        "first_call",
+        "data_finalizacao",
+        "sla_1_expirado",
+        "total_horas_1_atendimento_str",
         "sla_2_expirado",
-        "nome_sla_status_atual",
-
-        # Total horas primeiro segundo atendimento
         "total_horas_1_2_atendimento_str",
-        "total_horas_1_2_atendimento",
-        # ----------------------------------------------------------------
         "nome_status",
         )
 
@@ -34,20 +28,27 @@ class ChamadoAdmin(admin.ModelAdmin):
     ]
 
     readonly_fields = [
+        "total_horas_1_atendimento",
         "total_horas_1_2_atendimento",
     ]
 
 
-@admin.register(Interacao)
-class InteracaoAdmin(admin.ModelAdmin):
+@register(Interacao)
+class InteracaoAdmin(ModelAdmin):
     list_display = (
         "chamado",
         "status_acao_nome_relatorio",
         "fantasia_fornecedor",
+        "chamado_aprovadores",
         "seguencia",
+        "tempo_corrido_interacao_str",
     )
 
     search_fields = [
         "chamado__id",
         "chamado__assunto",
+    ]
+
+    readonly_fields = [
+        "tempo_corrido_interacao",
     ]

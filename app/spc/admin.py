@@ -1,9 +1,9 @@
-from django.contrib import admin
+from django.contrib.admin import ModelAdmin, register
 from .models import Spc
 
 
-@admin.register(Spc)
-class SpcAdmin(admin.ModelAdmin):
+@register(Spc)
+class SpcAdmin(ModelAdmin):
     list_display = (
         'id',
         'nome_consumidor',

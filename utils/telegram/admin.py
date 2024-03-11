@@ -1,4 +1,4 @@
-from django.contrib import admin
+from django.contrib.admin import ModelAdmin, register
 from .models import (
     UserTelegram,
     ApiTelegram,
@@ -6,19 +6,19 @@ from .models import (
 )
 
 
-@admin.register(UserTelegram)
-class UserTelegramAdmin(admin.ModelAdmin):
+@register(UserTelegram)
+class UserTelegramAdmin(ModelAdmin):
     list_display = ('id', 'nome', 'funcao', 'status')
     search_fields = ['nome',]
     list_display_links = list_display
 
 
-@admin.register(ApiTelegram)
-class ApiTelegramAdmin(admin.ModelAdmin):
+@register(ApiTelegram)
+class ApiTelegramAdmin(ModelAdmin):
     list_display = ('id', 'hash')
 
 
-@admin.register(BotTelegram)
-class BotTelegramAdmin(admin.ModelAdmin):
+@register(BotTelegram)
+class BotTelegramAdmin(ModelAdmin):
     list_display = ('id', 'nome', 'token')
     search_fields = ['nome',]

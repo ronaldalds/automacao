@@ -1,4 +1,4 @@
-from django.contrib import admin
+from django.contrib.admin import ModelAdmin, register
 from django.contrib import messages
 from django.core.exceptions import ValidationError
 from concurrent.futures import ThreadPoolExecutor
@@ -11,8 +11,8 @@ from .models import Cancelamento
 from .models import ThreadCancelamento
 
 
-@admin.register(ThreadCancelamento)
-class ThreadAdmin(admin.ModelAdmin):
+@register(ThreadCancelamento)
+class ThreadAdmin(ModelAdmin):
     list_display = (
         'id',
         'numero_thread',
@@ -60,7 +60,7 @@ def execute_cancelar(queryset):
         executor.map(processo_cancelamento, queryset)
 
 
-@admin.register(Cancelamento)
+@register(Cancelamento)
 class CancelamentoAdmin(ImportExportMixin, VersionAdmin):
     def cancelar(modeladmin, request, queryset: list[Cancelamento]):
         queryset = queryset.filter(status=False, processamento=False)

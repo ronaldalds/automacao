@@ -1,9 +1,9 @@
-from django.contrib import admin
+from django.contrib.admin import register
 from reversion.admin import VersionAdmin
 from import_export.admin import ImportExportMixin
-from ..models import *
+from ..models import Empresa
 
-@admin.register(Empresa)
+@register(Empresa)
 class EmpresaAdmin(ImportExportMixin, VersionAdmin):
     list_display = (
         'id',

@@ -1,4 +1,4 @@
-from django.contrib import admin
+from django.contrib.admin import ModelAdmin, register
 from django.contrib import messages
 from django.core.exceptions import ValidationError
 from concurrent.futures import ThreadPoolExecutor
@@ -11,8 +11,8 @@ from .models import OrdemServico
 from .models import ThreadOs
 
 
-@admin.register(ThreadOs)
-class ThreadAdmin(admin.ModelAdmin):
+@register(ThreadOs)
+class ThreadAdmin(ModelAdmin):
     list_display = (
         'id',
         'numero_thread',
@@ -45,11 +45,14 @@ def processo_os(item: OrdemServico):
     ordem_servico.os()
 
 
-@admin.register(OrdemServico)
+@register(OrdemServico)
 class OrdemServicoAdmin(ImportExportMixin, VersionAdmin):
     def os(modeladmin, request, queryset: list[OrdemServico]):
         limite_threads = ThreadOs.objects.get(pk=1).numero_thread
-        queryset = queryset.filter(status=False, processamento=False)
+        queryset = queryset.filter(
+            status=False,
+            processamento=False
+        )
         for query in queryset:
             query.processamento = True
             query.save()

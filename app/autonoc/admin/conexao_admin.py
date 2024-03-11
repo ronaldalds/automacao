@@ -1,40 +1,53 @@
-from django.contrib import admin
+from django.contrib.admin import register
 from reversion.admin import VersionAdmin
 from import_export.admin import ImportExportMixin
-from ..models import *
+from ..models import (
+    StatusContrato,
+    Consultor,
+    ServicoContrato,
+    CanalVenda,
+    FormaPagamento,
+    Conexao
+)
 
-@admin.register(StatusContrato)
+
+@register(StatusContrato)
 class StatusContratoAdmin(ImportExportMixin, VersionAdmin):
     list_display = ('id', 'nome', 'observacao')
     list_display_links = list_display
     search_fields = ['nome']
 
-@admin.register(Consultor)
+
+@register(Consultor)
 class ConsultorAdmin(ImportExportMixin, VersionAdmin):
     list_display = ('id', 'nome', 'telefone', 'ativo')
     list_display_links = list_display
     list_filter = ('ativo',)
     search_fields = ['nome']
 
-@admin.register(ServicoContrato)
+
+@register(ServicoContrato)
 class ServicoContratoAdmin(ImportExportMixin, VersionAdmin):
     list_display = ('id', 'nome')
     list_display_links = list_display
     search_fields = ['nome']
 
-@admin.register(CanalVenda)
+
+@register(CanalVenda)
 class CanalVendaAdmin(ImportExportMixin, VersionAdmin):
     list_display = ('id', 'nome')
     list_display_links = list_display
     search_fields = ['nome']
 
-@admin.register(FormaPagamento)
+
+@register(FormaPagamento)
 class FormaPagamentoAdmin(ImportExportMixin, VersionAdmin):
     list_display = ('id', 'tipo')
     list_display_links = list_display
     search_fields = ['tipo']
 
-@admin.register(Conexao)
+
+@register(Conexao)
 class ConexaoAdmin(ImportExportMixin, VersionAdmin):
     list_display = (
         'id',
