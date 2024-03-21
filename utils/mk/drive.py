@@ -25,7 +25,7 @@ class Mk:
         options.add_argument("--port=4444")
         options.add_argument('--no-sandbox')
         options.add_argument(f"--window-size={largura},{altura}")
-        # options.add_argument('--headless')
+        options.add_argument('--headless')
         webdriver_service = Service(ChromeDriverManager().install())
         self._driver = webdriver.Chrome(
             service=webdriver_service,
@@ -179,4 +179,11 @@ class Mk:
         self.iframePainel(coin, aside)
         self._wdw.until(frame_to_be_available_and_switch_to_it(
             (By.XPATH, '//div[@id="lay"]/div[2]/div[3]/div[1]/div/iframe')))
+        return self
+
+    def iframeGridInterna(self, coin: Coin, aside: Aside):
+        self._driver.switch_to.default_content()
+        self.iframePainel(coin, aside)
+        self._wdw.until(frame_to_be_available_and_switch_to_it(
+            (By.XPATH, '//div[@id="lay"]/div[2]/div[4]/div[2]/div/iframe')))
         return self

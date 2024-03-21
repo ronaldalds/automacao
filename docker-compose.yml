@@ -10,8 +10,8 @@ services:
       POSTGRES_PASSWORD: ralds
     ports:
       - "5432:5432"
-    # volumes:
-    #   - ./data:/var/lib/postgresql/data
+    volumes:
+      - ./data:/var/lib/postgresql/data
 
 
   automacao:
@@ -21,7 +21,7 @@ services:
     ports:
       - 8000:8000
     volumes:
-      - .:/app
+      - ./projeto:/app
     shm_size: 4g
     tty: true
     depends_on:

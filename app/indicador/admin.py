@@ -7,24 +7,20 @@ class ChamadoAdmin(ModelAdmin):
     list_display = (
         "id",
         "nome_categoria",
-        "nome_operador",
         "data_finalizacao",
-        "sla_1_expirado",
-        "total_horas_1_atendimento_str",
-        "sla_2_expirado",
-        "total_horas_1_2_atendimento_str",
-        "nome_status",
+        "nome_operador",
+        "nome_sla_status_atual",
+        "nome_sistema",
         )
 
     list_filter = (
         "nome_categoria",
         "nome_operador",
-        "nome_status",
     )
 
     search_fields = [
         "id",
-        "assunto",
+        "nome_categoria",
     ]
 
     readonly_fields = [
@@ -37,11 +33,11 @@ class ChamadoAdmin(ModelAdmin):
 class InteracaoAdmin(ModelAdmin):
     list_display = (
         "chamado",
+        "seguencia",
         "status_acao_nome_relatorio",
         "fantasia_fornecedor",
         "chamado_aprovadores",
-        "seguencia",
-        "tempo_corrido_interacao_str",
+        "tempo_corrido_interacao",
     )
 
     search_fields = [

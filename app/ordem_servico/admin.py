@@ -41,6 +41,9 @@ class OsResource(resources.ModelResource):
 
 
 def processo_os(item: OrdemServico):
+    if not item.processamento:
+        return None
+    item.processamento = False
     ordem_servico = Ordem(item)
     ordem_servico.os()
 

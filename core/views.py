@@ -21,8 +21,10 @@ class ValidateTokenView(APIView):
 
 def cronos_admin_login(request):
     if request.method == 'POST':
-        username: str = request.POST['username']
-        password: str = request.POST['password']
+        username = request.POST['username']
+        password = request.POST['password']
+        username = str(username)
+        password = str(password)
         next_url = request.GET.get('next', reverse('admin:index'))
         if username == "admin":
             user = authenticate(request, username=username, password=password)

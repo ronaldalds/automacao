@@ -20,12 +20,12 @@ class OstConfig(AppConfig):
         sheduler_ost.add_job(
             notificacao.shedule_api,
             'interval',
-            minutes=16
+            minutes=6
         )
         sheduler_ost.add_job(
             notificacao.verificar_agenda_os,
             'interval',
-            minutes=18
+            minutes=7
         )
 
         sheduler_ost.start()

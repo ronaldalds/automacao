@@ -45,11 +45,14 @@ class CancelamentoResource(resources.ModelResource):
             field for field in mandatory_fields if row.get(field) is None
         ]
         if missing_fields:
-            messages = [f"Error no campo: {msg}" for msg in missing_fields]
-            raise ValidationError(messages)
+            message = [f"Error no campo: {msg}" for msg in missing_fields]
+            raise ValidationError(message)
 
 
 def processo_cancelamento(item: Cancelamento):
+    if not item.processamento:
+        return None
+    item.processamento = False
     cancelamento = Cancelar(item)
     cancelamento.cancelar()
 

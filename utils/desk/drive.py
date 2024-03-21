@@ -48,13 +48,14 @@ class Desk:
                 auth_dto.status = True
         return auth_dto
 
-    def relatorio(self, id: str) -> dict:
+    def relatorio(self, id: str) -> list[dict]:
         headers = {"Authorization": self.authentication().token}
         data_json = {"Chave": id}
         response = self._make_request(self.url_relatorio, headers, data_json)
         if (response.status_code == 200) and (response.json().get("root")):
-            return response.json().get("root")
-        return {}
+            data: list[dict] = response.json().get("root")
+            return data
+        return [{}]
 
     def interagir_chamado(
         self,

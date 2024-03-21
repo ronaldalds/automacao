@@ -1,5 +1,5 @@
-from .models import Chamado, Interacao
 from utils.desk.drive import Desk
+from .models import Chamado, Interacao
 from datetime import datetime
 
 
@@ -7,102 +7,102 @@ class CargaIndicadores:
     def __init__(self):
         self.desk = Desk()
 
+    def tempo_atendimento(self, tempo: str) -> float | None:
+        if tempo in ["0", "00:00:00"]:
+            return 0.0 if tempo == "0" else None
+        negative = "-" in tempo
+        if negative:
+            tempo = tempo.replace("-", "")
+        horas, minutos, segundos = map(int, tempo.split(':'))
+        total = horas + minutos / 60 + segundos / 3600
+        return round(total * (-1 if negative else 1), 2)
+
+    def chamado_save(self, chamado: Chamado, data: dict) -> None:
+        chamado.nome_categoria = data.get("NomeCategoria", "")
+        chamado.assunto = data.get("Assunto", "")
+        chamado.nome_status = data.get("NomeStatus", "")
+        chamado.nome_operador = data.get("NomeOperador", "")
+        chamado.sla_1_expirado = data.get("Sla1Expirado", "")
+        chamado.sla_2_expirado = data.get("Sla2Expirado", "")
+        chamado.first_call = data.get("FirstCall")
+        chamado.nome_sistema = data.get("_203471", "")
+        chamado.nome_sla_status_atual = data.get("NomeSlaStatusAtual", "")
+        chamado.tempo_restante_1 = self.tempo_atendimento(str(data.get("TempoRestantePrimeiroAtendimento")))
+        chamado.tempo_restante_2 = self.tempo_atendimento(str(data.get("TempoRestanteSegundoAtendimento")))
+        chamado.total_horas_1_atendimento = self.tempo_atendimento(
+            str(data.get("TempoUtilAtPrimeiroAtendimento"))
+        )
+        chamado.total_horas_1_2_atendimento = self.tempo_atendimento(
+            str(data.get("TotalHorasPrimeiroSegundoAtendimento"))
+        )
+        chamado.save()
+
+    def interacao_save(self, interacao: Interacao, data: dict) -> None:
+        interacao.seguencia = data.get("Sequencia")
+        interacao.status_acao_nome_relatorio = data.get(
+            "StatusAcaoNomeRelatorio",
+        )
+        interacao.fantasia_fornecedor = data.get("FantasiaFornecedor", "")
+        interacao.chamado_aprovadores = data.get("ChamadoAprovadores", "")
+        interacao.tempo_corrido_interacao = self.tempo_atendimento(
+            str(data.get("TempoCorridoAcoes"))
+        )
+        interacao.save()
+
     def chamados_desk(self):
-        chamados = self.desk.relatorio("140")
+        response = self.desk.relatorio("140")
         print(f"[{datetime.now()}] Atualizando chamados...")
-        if not chamados:
+        if not response:
             return
-        for chamado in chamados:
-            exists_chamado = Chamado.objects.filter(
-                id=chamado.get("CodChamado")
-            ).exists()
-            andamento = chamado.get("DataFinalizacao") == "00-00-0000"
-            if exists_chamado and andamento:
-                item = Chamado.objects.filter(
-                    id=chamado.get("CodChamado")
-                ).first()
-                item.nome_sla_status_atual = chamado.get("NomeSlaStatusAtual")
-                item.sla_2_expirado = chamado.get("Sla2Expirado")
-                item.first_call = chamado.get("FirstCall")
-                item.nome_status = chamado.get("NomeStatus")
-                item.sla_1_expirado = chamado.get("Sla1Expirado")
-                item.total_horas_1_atendimento_str = chamado.get(
-                    "TempoUtilAtPrimeiroAtendimento"
+        for data in response:
+            item = Chamado.objects.filter(
+                id=data.get("CodChamado")
+            ).first()
+            andamento = data.get("DataFinalizacao") == "00-00-0000"
+            if item and not andamento:
+                item.andamento = andamento
+                item.data_finalizacao = datetime.strptime(
+                    data.get("DataFinalizacao"),
+                    "%d-%m-%Y"
                 )
-                item.total_horas_1_2_atendimento_str = chamado.get(
-                    "TotalHorasPrimeiroSegundoAtendimento"
-                )
-                item.nome_operador = chamado.get("NomeOperador", "")
-                item.save()
-            elif not exists_chamado:
-                print(chamado)
+                self.chamado_save(item, data)
+            elif item and andamento:
+                self.chamado_save(item, data)
+            elif not item:
+                print(data)
                 novo = Chamado()
-                novo.id = chamado.get("CodChamado")
+                novo.id = data.get("CodChamado")
                 novo.data_criacao = datetime.strptime(
-                    chamado.get("DataCriacao"),
+                    data.get("DataCriacao"),
                     "%d-%m-%Y"
                 )
                 novo.andamento = andamento
                 if not andamento:
                     novo.data_finalizacao = datetime.strptime(
-                        chamado.get("DataFinalizacao"),
+                        data.get("DataFinalizacao"),
                         "%d-%m-%Y"
                     )
-                novo.assunto = chamado.get("Assunto")
-                novo.nome_categoria = chamado.get("NomeCategoria")
-                novo.total_horas_1_2_atendimento_str = chamado.get(
-                    "TotalHorasPrimeiroSegundoAtendimento"
-                )
-                novo.nome_sla_status_atual = chamado.get(
-                    "NomeSlaStatusAtual"
-                )
-                novo.sla_2_expirado = chamado.get("Sla2Expirado")
-                novo.first_call = chamado.get("FirstCall")
-                novo.nome_operador = chamado.get("NomeOperador", "")
-                novo.nome_status = chamado.get("NomeStatus")
-                novo.sla_1_expirado = chamado.get("Sla1Expirado")
-                novo.total_horas_1_atendimento_str = chamado.get(
-                    "TempoUtilAtPrimeiroAtendimento"
-                )
-                novo.save()
+                self.chamado_save(novo, data)
         print(f"[{datetime.now()}] Finalizado chamados...")
 
     def interacao_desk(self):
-        interacoes = self.desk.relatorio("141")
+        response = self.desk.relatorio("141")
         print(f"[{datetime.now()}] Atualizando interações...")
-        if not interacoes:
+        if not response:
             return
-        for interacao in interacoes:
+        for data in response:
             chamado = Chamado.objects.filter(
-                id=interacao.get("NChamado")
+                id=data.get("NChamado")
             ).first()
             if not chamado:
                 continue
             existe_interacao = Interacao.objects.filter(
                 chamado=chamado.id,
-                seguencia=interacao.get("Sequencia")
+                seguencia=data.get("Sequencia")
             ).exists()
-            if existe_interacao:
-                continue
-            print(interacao)
-            novo = Interacao()
-            novo.chamado = chamado
-            novo.status_acao_nome_relatorio = interacao.get(
-                "StatusAcaoNomeRelatorio"
-            )
-            novo.fantasia_fornecedor = interacao.get(
-                "FantasiaFornecedor",
-                ""
-            )
-            novo.seguencia = interacao.get(
-                "Sequencia"
-            )
-            novo.chamado_aprovadores = interacao.get(
-                "ChamadoAprovadores",
-                ""
-            )
-            novo.tempo_corrido_interacao_str = interacao.get(
-                "TempoCorridoAcoes"
-            )
-            novo.save()
+            if not existe_interacao:
+                print(data)
+                novo = Interacao()
+                novo.chamado = chamado
+                self.interacao_save(novo, data)
         print(f"[{datetime.now()}] Finalizado interações...")

@@ -29,10 +29,7 @@ SECRET_KEY = env.get("SECRET_KEY", "change-me")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = bool(int(env.get("DEBUG", 1)))
 
-ALLOWED_HOSTS = [
-    h.strip() for h in env.get("ALLOWED_HOSTS", "*").split(",")
-    if h.strip()
-]
+ALLOWED_HOSTS = [h.strip() for h in env.get("ALLOWED_HOSTS", "*").split(",") if h.strip()]
 
 
 # Application definition
@@ -56,20 +53,21 @@ INSTALLED_APPS = [
     'drf_yasg',
 
     # Utils
-    'utils.mk',
     'utils.desk',
-    'utils.goon',
-    'utils.avin',
-    'utils.telegram',
-    'utils.mkat',
-    'utils.cronos',
+    # 'utils.mk',
+    # 'utils.goon',
+    # 'utils.avin',
+    # 'utils.telegram',
+    # 'utils.mkat',
+    # 'utils.cronos',
 
     # APP
+    # 'app.movimentacao',
+    'app.indicador',
     # 'app.autonoc',
     # 'app.cancelamento',
     # 'app.dashboard',
     # 'app.goontodesk',
-    'app.indicador',
     # 'app.ordem_servico',
     # 'app.ost',
     # 'app.spc',
@@ -116,22 +114,22 @@ WSGI_APPLICATION = 'core.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql',
-#         'NAME': env.get("POSTGRES_DB", "change-me"),
-#         'USER': env.get("POSTGRES_USER", "change-me"),
-#         'PASSWORD': env.get("POSTGRES_PASSWORD", "change-me"),
-#         'HOST': env.get("POSTGRES_HOST", "change-me"),
-#         'PORT': env.get("POSTGRES_PORT", "change-me"),
-#     }
-# }
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': env.get("POSTGRES_DB", "change-me"),
+        'USER': env.get("POSTGRES_USER", "change-me"),
+        'PASSWORD': env.get("POSTGRES_PASSWORD", "change-me"),
+        'HOST': env.get("POSTGRES_HOST", "change-me"),
+        'PORT': env.get("POSTGRES_PORT", "change-me"),
     }
 }
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+#     }
+# }
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
 str_pass_django = "django.contrib.auth.password_validation"

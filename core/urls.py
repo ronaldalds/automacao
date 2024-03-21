@@ -56,17 +56,17 @@ urlpatterns = [
         obtain_auth_token,
         name='api_auth'
     ),
-    path(
-        "dashboards/",
-        include("app.dashboard.urls")
-    ),
+    # path(
+    #     "dashboards/",
+    #     include("app.dashboard.urls")
+    # ),
     # path(
     #     "watch/",
     #     include("app.watch.urls")
     # ),
     # path(
-    #     "ost/",
-    #     include("app.ost.urls")
+    #     "movimentacoes/",
+    #     include("app.movimentacao.urls")
     # ),
     # path(
     #     "ost-tecnicos/",
