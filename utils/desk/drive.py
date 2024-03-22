@@ -48,7 +48,7 @@ class Desk:
                 auth_dto.status = True
         return auth_dto
 
-    def relatorio(self, id: str) -> list[dict]:
+    def relatorio(self, id: str):
         headers = {"Authorization": self.authentication().token}
         data_json = {"Chave": id}
         response = self._make_request(self.url_relatorio, headers, data_json)
