@@ -35,6 +35,7 @@ class CargaIndicadores:
         chamado.total_horas_1_2_atendimento = self.tempo_atendimento(
             str(data.get("TotalHorasPrimeiroSegundoAtendimento"))
         )
+        chamado.nome_grupo = data.get("NomeGrupo", "")
         chamado.save()
 
     def interacao_save(self, interacao: Interacao, data: dict) -> None:

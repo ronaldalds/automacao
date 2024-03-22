@@ -24,6 +24,7 @@ class Chamado(models.Model):
     nome_sistema = models.CharField(max_length=128, null=True, blank=True)
     tempo_restante_1 = models.FloatField(editable=False, null=True, blank=True)
     tempo_restante_2 = models.FloatField(editable=False, null=True, blank=True)
+    nome_grupo = models.CharField(max_length=256, null=True, blank=True)
     nome_sla_status_atual = models.CharField(
         max_length=128,
         null=True,
