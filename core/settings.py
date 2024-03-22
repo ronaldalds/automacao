@@ -54,11 +54,11 @@ INSTALLED_APPS = [
 
     # Utils
     'utils.desk',
-    # 'utils.mk',
-    # 'utils.goon',
+    'utils.mk',
+    'utils.goon',
+    'utils.telegram',
+    'utils.mkat',
     # 'utils.avin',
-    # 'utils.telegram',
-    # 'utils.mkat',
     # 'utils.cronos',
 
     # APP
