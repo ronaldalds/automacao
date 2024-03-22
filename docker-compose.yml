@@ -1,4 +1,4 @@
-version: '3.9'
+version: '3.8'
 
 services:
   psql:
@@ -19,9 +19,9 @@ services:
     build:
       context: .
     ports:
-      - 8000:8000
+      - 5002:5002
     volumes:
-      - ./projeto:/app
+      - .:/app
     shm_size: 4g
     tty: true
     depends_on:

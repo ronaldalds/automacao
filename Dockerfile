@@ -15,5 +15,5 @@ RUN pip3 install --no-cache-dir -r requirements.txt
 
 COPY . .
 
-CMD xvfb-run --server-args="-screen 0, 1280x960" -a gunicorn core.wsgi:application --bind 0.0.0.0:5000
-# CMD xvfb-run --server-args="-screen 0, 1280x960" -a python3 manage.py runserver 0.0.0.0:8000
+# CMD xvfb-run --server-args="-screen 0, 1280x960" -a gunicorn core.wsgi:application --bind 0.0.0.0:5000
+CMD xvfb-run --server-args="-screen 0, 1280x960" -a python3 manage.py runserver 0.0.0.0:5002

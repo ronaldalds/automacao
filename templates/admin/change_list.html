@@ -1,5 +1,6 @@
 {% extends "admin/base_site.html" %}
 {% load i18n admin_urls static admin_list %}
+
 {% block extrastyle %}
   {{ block.super }}
     <link rel="stylesheet" href="{% static "admin/css/changelists.css" %}">
@@ -40,6 +41,7 @@
 {% block content %}
   <div id="content-main">
     {% block object-tools %}
+      
         <ul class="object-tools">
           {% block object-tools-items %}
           <button id="filter-toogle-button-hider"  onclick="toogleExtends()">Mostrar/Ocultar Filtros</button>
@@ -63,26 +65,16 @@
           <div>{{ cl.formset.management_form }}</div>
         {% endif %}
 
+        {% block pagination %}{% pagination cl %}{% endblock %}
         {% block result_list %}
           {% if action_form and actions_on_top and cl.show_admin_actions %}{% admin_actions %}{% endif %}
           {% result_list cl %}
           {% if action_form and actions_on_bottom and cl.show_admin_actions %}{% admin_actions %}{% endif %}
         {% endblock %}
-        {% block pagination %}{% pagination cl %}{% endblock %}
         </form>
         
       </div>
-      {% block filters %}
-        {% if cl.has_filters %}
-          <div id="changelist-filter" extend="false">
-            <h2>{% translate 'Filter' %}</h2>
-            {% if cl.has_active_filters %}<h3 id="changelist-filter-clear">
-              <a href="{{ cl.clear_all_filters_qs }}">&#10006; {% translate "Clear all filters" %}</a>
-            </h3>{% endif %}
-            {% for spec in cl.filter_specs %}{% admin_list_filter cl spec %}{% endfor %}
-          </div>
-        {% endif %}
-      {% endblock %}
+      
     </div>
   </div>
   <script>
