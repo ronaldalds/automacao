@@ -2,11 +2,11 @@ version: '3.9'
 
 services:
   psql:
-    image: postgres:latest
+    image: postgres:16
     container_name: psql
     environment:
-      POSTGRES_DB: bot_sistema
-      POSTGRES_USER: ralds
+      POSTGRES_DB: automacao
+      POSTGRES_USER: automacao
       POSTGRES_PASSWORD: ralds
     ports:
       - "5432:5432"

@@ -26,6 +26,8 @@ class ChamadoAdmin(ModelAdmin):
     readonly_fields = [
         "total_horas_1_atendimento",
         "total_horas_1_2_atendimento",
+        "tempo_restante_1",
+        "tempo_restante_2",
     ]
 
 
