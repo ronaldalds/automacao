@@ -7,7 +7,7 @@ class CargaIndicadores:
     def __init__(self):
         self.desk = Desk()
 
-    def tempo_atendimento(self, tempo: str) -> float | None:
+    def tempo_atendimento(self, tempo: str):
         if tempo in ["0", "00:00:00"]:
             return 0.0 if tempo == "0" else None
         negative = "-" in tempo
