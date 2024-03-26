@@ -65,7 +65,7 @@ def execute_cancelar(queryset):
 
 @register(Cancelamento)
 class CancelamentoAdmin(ImportExportMixin, VersionAdmin):
-    def cancelar(modeladmin, request, queryset: list[Cancelamento]):
+    def cancelar(modeladmin, request, queryset):
         queryset = queryset.filter(status=False, processamento=False)
         for query in queryset:
             query.processamento = True
