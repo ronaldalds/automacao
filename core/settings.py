@@ -62,13 +62,13 @@ INSTALLED_APPS = [
     # 'utils.cronos',
 
     # APP
-    # 'app.movimentacao',
     'app.indicador',
+    'app.cancelamento',
+    'app.ordem_servico',
+    # 'app.movimentacao',
     # 'app.autonoc',
-    # 'app.cancelamento',
     # 'app.dashboard',
     # 'app.goontodesk',
-    # 'app.ordem_servico',
     # 'app.ost',
     # 'app.spc',
     # 'app.x9',
