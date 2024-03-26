@@ -22,7 +22,7 @@ class Ordem:
         self.browser: Mk
         self.login_mk: Login
 
-    def documento(self, doc: str) -> str | None:
+    def documento(self, doc: str):
         rg_cpf = re.compile(
             "[0-9]{3}[.][0-9]{3}[.][0-9]{3}[-][0-9]{2}"
         )

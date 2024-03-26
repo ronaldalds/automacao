@@ -50,7 +50,7 @@ def processo_os(item: OrdemServico):
 
 @register(OrdemServico)
 class OrdemServicoAdmin(ImportExportMixin, VersionAdmin):
-    def os(modeladmin, request, queryset: list[OrdemServico]):
+    def os(modeladmin, request, queryset):
         limite_threads = ThreadOs.objects.get(pk=1).numero_thread
         queryset = queryset.filter(
             status=False,
