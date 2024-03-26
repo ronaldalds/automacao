@@ -13,7 +13,10 @@ class CargaIndicadores:
         negative = "-" in tempo
         if negative:
             tempo = tempo.replace("-", "")
-        horas, minutos, segundos = map(int, tempo.split(':'))
+        tempo_str = tempo.split(":")
+        horas = int(tempo_str[0])
+        minutos = int(tempo_str[1])
+        segundos = int(tempo_str[2]) if tempo_str[2] == "" else 0
         total = horas + minutos / 60 + segundos / 3600
         return round(total * (-1 if negative else 1), 2)
 

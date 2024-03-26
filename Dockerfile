@@ -1,11 +1,11 @@
-FROM selenium/standalone-chrome:latest
+FROM selenium/standalone-chrome:122.0
 
 USER root
 
 ENV TZ=America/Fortaleza
 
 # Instala o Python, pip e xvfb
-RUN apt-get update && apt-get install -y python3 python3-pip xvfb
+RUN apt-get update && apt install -y python3.11 python3-pip xvfb
 
 WORKDIR /app
 

@@ -11,6 +11,8 @@ class ChamadoAdmin(ModelAdmin):
         "nome_operador",
         "nome_sla_status_atual",
         "nome_sistema",
+        "tempo_restante_1",
+        "tempo_restante_2",
         )
 
     list_filter = (

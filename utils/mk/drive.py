@@ -1,7 +1,8 @@
 from time import sleep
 from .coin.coin import Coin
 from .aside.aside import Aside
-from webdriver_manager.chrome import ChromeDriverManager
+# from webdriver_manager.chrome import ChromeDriverManager
+from webdriver_manager.firefox import GeckoDriverManager
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.service import Service
@@ -26,8 +27,8 @@ class Mk:
         options.add_argument('--no-sandbox')
         options.add_argument(f"--window-size={largura},{altura}")
         options.add_argument('--headless')
-        webdriver_service = Service(ChromeDriverManager().install())
-        self._driver = webdriver.Chrome(
+        webdriver_service = Service(GeckoDriverManager().install())
+        self._driver = webdriver.Firefox(
             service=webdriver_service,
             options=options
             )

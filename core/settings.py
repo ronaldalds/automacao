@@ -65,7 +65,7 @@ INSTALLED_APPS = [
     'app.indicador',
     'app.cancelamento',
     'app.ordem_servico',
-    # 'app.movimentacao',
+    'app.movimentacao',
     # 'app.autonoc',
     # 'app.dashboard',
     # 'app.goontodesk',
