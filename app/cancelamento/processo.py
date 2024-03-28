@@ -169,8 +169,7 @@ class Cancelar:
         try:
             self.browser.iframeForm()
             self.browser.click(
-                '//div[@title="Selecione um motivo de cancelamento."\
-                    ]/div/button'
+                '//div[@title="Selecione um motivo de cancelamento."]/div/button'
             )
             self.browser.write(
                 '//input[@id="lookupSearchQuery"]',
@@ -187,8 +186,7 @@ class Cancelar:
         # detalhes do motivo de cancelamento
         try:
             self.browser.write(
-                '//textarea[@title=\
-                    "Informe detalhes do cancelamento do contrato."]',
+                '//textarea[@title="Informe detalhes do cancelamento do contrato."]',
                 self.conexao.detalhes_cancelamento
             )
         except Exception as e:
@@ -320,7 +318,7 @@ class Cancelar:
                 f"Error alert concluir cancelamento: {e}"
             )
 
-        self.message_sucess("cancelamento de contrato conluído")
+        return self.message_sucess("cancelamento de contrato conluído")
 
     def set_multa(self) -> None:
         try:

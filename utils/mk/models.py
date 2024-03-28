@@ -48,4 +48,5 @@ class Defeito(models.Model):
 class Faturamento(models.Model):
     id_web = models.IntegerField()
     mk = models.IntegerField()
+    dia_faturamento = models.IntegerField(default=2)
     descricao = models.CharField(max_length=128)

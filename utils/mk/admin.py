@@ -94,6 +94,7 @@ class DefeitoAdmin(ImportExportMixin, VersionAdmin):
 class FaturamentoAdmin(ImportExportMixin, VersionAdmin):
     list_display = (
         'id',
+        'dia_faturamento',
         'id_web',
         'mk',
         'descricao',

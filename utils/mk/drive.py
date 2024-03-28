@@ -1,8 +1,7 @@
 from time import sleep
 from .coin.coin import Coin
 from .aside.aside import Aside
-# from webdriver_manager.chrome import ChromeDriverManager
-from webdriver_manager.firefox import GeckoDriverManager
+from webdriver_manager.chrome import ChromeDriverManager
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.service import Service
@@ -27,8 +26,8 @@ class Mk:
         options.add_argument('--no-sandbox')
         options.add_argument(f"--window-size={largura},{altura}")
         options.add_argument('--headless')
-        webdriver_service = Service(GeckoDriverManager().install())
-        self._driver = webdriver.Firefox(
+        webdriver_service = Service(ChromeDriverManager().install())
+        self._driver = webdriver.Chrome(
             service=webdriver_service,
             options=options
             )
@@ -54,7 +53,7 @@ class Mk:
         ).double_click().perform()
         sleep(3)
 
-    def text(self, xpath: str) -> str:
+    def text(self, xpath: str) -> str | None:
         value = self._driver.find_element(
             By.XPATH,
             xpath
@@ -166,13 +165,6 @@ class Mk:
         self.iframePainel(coin, aside)
         self._wdw.until(frame_to_be_available_and_switch_to_it(
             (By.XPATH, '//div[@id="lay"]/div[2]/div[2]/div[2]/div/iframe')))
-        return self
-
-    def iframeGridResFaturamento(self, coin: Coin, aside: Aside):
-        self._driver.switch_to.default_content()
-        self.iframePainel(coin, aside)
-        self._wdw.until(frame_to_be_available_and_switch_to_it(
-            (By.XPATH, '//div[@id="lay"]/div[2]/div[3]/div[1]/div/iframe')))
         return self
 
     def iframeGridRes(self, coin: Coin, aside: Aside):

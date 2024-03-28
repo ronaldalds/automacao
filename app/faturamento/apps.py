@@ -15,9 +15,8 @@ class FaturamentoConfig(AppConfig):
             sheuler_faturamento.shutdown()
 
         mk_1 = FaturamentoProcesso(mk=1)
-        # mk_3 = FaturamentoProcesso(mk=3)
-        mk_1.regra()
+        mk_3 = FaturamentoProcesso(mk=3)
         sheuler_faturamento.configure(timezone="america/fortaleza")
-        # sheuler_faturamento.add_job(mk_1.regra, 'interval', minutes=0.1)
-        # sheuler_faturamento.add_job(mk_3.regra, 'interval', minutes=0.1)
+        sheuler_faturamento.add_job(mk_1.regra, 'interval', minutes=30)
+        sheuler_faturamento.add_job(mk_3.regra, 'interval', minutes=30)
         sheuler_faturamento.start()
