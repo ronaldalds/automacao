@@ -66,7 +66,7 @@ INSTALLED_APPS = [
     'app.cancelamento',
     'app.ordem_servico',
     'app.movimentacao',
-    # 'app.faturamento',
+    'app.faturamento',
     # 'app.autonoc',
     # 'app.dashboard',
     # 'app.goontodesk',
