@@ -19,7 +19,7 @@ services:
     build:
       context: .
     ports:
-      - 6000:6000
+      - 3333:3333
     volumes:
       - .:/app
     shm_size: 4g
