@@ -3,7 +3,7 @@
 
 {% block extrastyle %}
   {{ block.super }}
-    <link rel="stylesheet" href="{% static "admin/css/changelists.css" %}">
+  <link rel="stylesheet" href="{% static "admin/css/changelists.css" %}">
   {% if cl.formset %}
     <link rel="stylesheet" href="{% static "admin/css/forms.css" %}">
   {% endif %}
@@ -41,10 +41,9 @@
 {% block content %}
   <div id="content-main">
     {% block object-tools %}
-      
         <ul class="object-tools">
           {% block object-tools-items %}
-          <button id="filter-toogle-button-hider"  onclick="toogleExtends()">Mostrar/Ocultar Filtros</button>
+            <button id="filter-toogle-button-hider"  onclick="hideFilter(event)">Mostrar/Ocultar Filtros</button>
             {% change_list_object_tools %}
           {% endblock %}
         </ul>
@@ -59,41 +58,70 @@
       <div class="changelist-form-container">
         {% block search %}{% search_form cl %}{% endblock %}
         {% block date_hierarchy %}{% if cl.date_hierarchy %}{% date_hierarchy cl %}{% endif %}{% endblock %}
+        {% block pagination %}{% pagination cl %}{% endblock %}
 
         <form id="changelist-form" method="post"{% if cl.formset and cl.formset.is_multipart %} enctype="multipart/form-data"{% endif %} novalidate>{% csrf_token %}
         {% if cl.formset %}
           <div>{{ cl.formset.management_form }}</div>
         {% endif %}
 
-        {% block pagination %}{% pagination cl %}{% endblock %}
         {% block result_list %}
           {% if action_form and actions_on_top and cl.show_admin_actions %}{% admin_actions %}{% endif %}
           {% result_list cl %}
           {% if action_form and actions_on_bottom and cl.show_admin_actions %}{% admin_actions %}{% endif %}
         {% endblock %}
         </form>
-        
       </div>
-      
+      {% block filters %}
+        {% if cl.has_filters %}
+          <div id="changelist-filter">
+            <h2>{% translate 'Filter' %}</h2>
+            {% if cl.is_facets_optional or cl.has_active_filters %}<div id="changelist-filter-extra-actions">
+              {% if cl.is_facets_optional %}<h3>
+                {% if cl.add_facets %}<a href="{{ cl.remove_facet_link }}" class="hidelink">{% translate "Hide counts" %}</a>
+                {% else %}<a href="{{ cl.add_facet_link }}" class="viewlink">{% translate "Show counts" %}</a>{% endif %}
+              </h3>{% endif %}
+              {% if cl.has_active_filters %}<h3>
+                <a href="{{ cl.clear_all_filters_qs }}">&#10006; {% translate "Clear all filters" %}</a>
+              </h3>{% endif %}
+            </div>{% endif %}
+            {% for spec in cl.filter_specs %}{% admin_list_filter cl spec %}{% endfor %}
+          </div>
+        {% endif %}
+      {% endblock %}
     </div>
   </div>
   <script>
-    
-    function toogleExtends(){
-      const elements = document.querySelector('div#changelist-filter');
-      
-
-      const extend = elements.getAttribute('extend');
-      
-      if(extend == 'false'){
-        elements.setAttribute('extend', 'true');
-        elements.style.display = 'block';
-      }else{
-        elements.setAttribute('extend', 'false');
-        elements.style.display = 'none';
-      }
+    function hideFilter(e){
+       e.preventDefault(); // Prevent the default action of the click event
+       const elements = document.querySelector('div#changelist-filter');
+       const extend = elements.getAttribute('extend');
+       
+       if(extend == 'false'){
+         elements.setAttribute('extend', 'true');
+         elements.style.display = 'block';
+         localStorage.setItem('changelistFilterVisible', 'true');
+       }else{
+         elements.setAttribute('extend', 'false');
+         elements.style.display = 'none';
+         localStorage.setItem('changelistFilterVisible', 'false');
+       }
     }
    
-
-  </script>
+    // Function to check localStorage and apply the saved state
+    function applySavedState() {
+       const savedState = localStorage.getItem('changelistFilterVisible');
+       const elements = document.querySelector('div#changelist-filter');
+       if (savedState === 'true') {
+         elements.setAttribute('extend', 'true');
+         elements.style.display = 'block';
+       } else {
+         elements.setAttribute('extend', 'false');
+         elements.style.display = 'none';
+       }
+    }
+   
+    // Call applySavedState when the page loads
+    document.addEventListener('DOMContentLoaded', applySavedState);
+   </script>
 {% endblock %}

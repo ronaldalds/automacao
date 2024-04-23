@@ -31,6 +31,8 @@ DEBUG = bool(int(env.get("DEBUG", 1)))
 
 ALLOWED_HOSTS = [h.strip() for h in env.get("ALLOWED_HOSTS", "*").split(",") if h.strip()]
 
+# Configuração Celery
+CELERY_BROKER_URL = env.get("CELERY_BROKER_URL")
 
 # Application definition
 INSTALLED_APPS = [
@@ -62,7 +64,6 @@ INSTALLED_APPS = [
     # 'utils.cronos',
 
     # APP
-    'app.indicador',
     'app.cancelamento',
     'app.ordem_servico',
     'app.movimentacao',

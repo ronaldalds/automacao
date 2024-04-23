@@ -94,26 +94,79 @@ class Desk:
         except Exception as e:
             print(f"Error Interagir: {e}")
 
-    def lista_chamados(self):
+    def criar_lista(self):
+        valor = self.total_chamados()
+        lista = []
+        for i in range(0, valor, 3000):
+            lista.append('"{}"'.format(i))
+        return lista
+
+    def total_chamados(self):
         headers = {"Authorization": self.authentication().token}
         data_json = {
-            "Pesquisa": "",
-            "Tatual": "",
-            "Ativo": "Todos",
-            "StatusSLA": "N",
-            "Colunas": {
-                "Chave": "on",
-                "CodChamado": "on",
-                "ChaveUsuario": "on",
-                "NomeUsuario": "on",
-                "SobrenomeUsuario": "on",
-                "NomeOperador": "on",
-                "SobrenomeOperador": "on"
+            "Pesquisa":"",
+            "Tatual":"",
+            "Ativo":"Todos",
+            "StatusSLA":"N",
+            "Colunas":{
+                "Chave":"on"
             },
             "Ordem": [
                 {
-                    "Coluna": "Chave",
-                    "Direcao": "false"
+                "Coluna":"Chave",
+                "Direcao":"false"
+                }
+            ]
+        }
+        response = self._make_request(self.url_chamados, headers, data_json)
+        if response.status_code == 200:
+            chave = response.json().get("root")[0].get("Chave")
+            return chave
+        return None
+
+    def lista_chamados(
+            self,
+            pesquisa: str = "",
+            chave_filtro: str = "",
+            chave: str = "",
+            direcao: str = "false",
+            ativo: str = "Todos"
+        ):
+        headers = {"Authorization": self.authentication().token}
+        data_json = {
+            "Pesquisa":pesquisa,
+            "Tatual":chave,
+            "Ativo":ativo,
+            "Filtro": {
+                "Chave":[chave_filtro]
+            },
+            "StatusSLA":"N",
+            "Colunas":{
+                "Chave":"on",
+                "CodChamado":"on",
+                "NomeGrupo":"on",
+                "NomeCategoria":"on",
+                "Assunto":"on",
+                "DataCriacao":"on",
+                "DataFinalizacao":"on",
+                "NomeOperador":"on",
+                "NomeStatus":"on",
+                "PossuiSla":"on",
+                "NomeSlaStatusAtual":"on",
+                "FirstCall":"on",
+                "Sla1Expirado":"on",
+                "Sla2Expirado":"on",
+                "TempoUtilAtPrimeiroAtendimento":"on",
+                "TotalHorasPrimeiroSegundoAtendimento":"on",
+                "TempoRestantePrimeiroAtendimento":"on",
+                "TempoRestanteSegundoAtendimento":"on",
+                "_203471":"on",
+                "TAcoes":"on"
+            },
+            "Ordem": [
+                {
+                "Coluna":"Chave",
+                "Direcao":direcao
                 }
             ]
         }

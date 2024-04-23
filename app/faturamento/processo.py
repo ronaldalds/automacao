@@ -177,7 +177,7 @@ class FaturamentoProcesso:
             self.browser.iframeGridRes(self.financeiro, self.faturamento)
             self.browser.write(
                 '//td[@class=" webix_last_row" and @column="10"]/div/input',
-                "Boleto Digital"
+                "Digital"
             )
         except Exception as e:
             return self.message_error(f"Error seleção de profile: {e}")

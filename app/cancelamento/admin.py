@@ -6,9 +6,10 @@ from threading import Thread
 from reversion.admin import VersionAdmin
 from import_export import resources
 from import_export.admin import ImportExportMixin
-from .processo import Cancelar
 from .models import Cancelamento
 from .models import ThreadCancelamento
+from .tasks import processo_cancelamento
+from .processo import Cancelar
 
 
 @register(ThreadCancelamento)
@@ -50,7 +51,8 @@ class CancelamentoResource(resources.ModelResource):
 
 
 def processo_cancelamento(item: Cancelamento):
-    if not item.processamento:
+    query = Cancelamento.objects.get(id=item.pk)
+    if not query.processamento:
         return None
     item.processamento = False
     cancelamento = Cancelar(item)
@@ -65,13 +67,14 @@ def execute_cancelar(queryset):
 
 @register(Cancelamento)
 class CancelamentoAdmin(ImportExportMixin, VersionAdmin):
-    def cancelar(modeladmin, request, queryset):
+    def cancelar(modeladmin, request, queryset: list[Cancelamento]):
         queryset = queryset.filter(status=False, processamento=False)
         for query in queryset:
+            processo_cancelamento.delay(item=query.pk)
             query.processamento = True
             query.save()
 
-        # Criando e iniciando o thread
+        # Criando e iniciando o thread 
         thread = Thread(target=execute_cancelar, args=(queryset,))
         thread.start()
         messages.success(
@@ -79,9 +82,16 @@ class CancelamentoAdmin(ImportExportMixin, VersionAdmin):
             f'Foi iniciado {len(queryset)} cancelamentos'
         )
 
-    cancelar.short_description = "Cancelar conexão"
+    def tirar_processamento(modeladmin, request, queryset: list[Cancelamento]):
+        queryset = queryset.filter(status=False, processamento=True)
+        for query in queryset:
+            query.processamento = False
+            query.save()
 
-    actions = [cancelar]
+    cancelar.short_description = "Cancelar conexão"
+    tirar_processamento.short_description = "Tirar Processamento"
+
+    actions = [cancelar, tirar_processamento]
     resource_class = CancelamentoResource
     list_display = (
         'id',

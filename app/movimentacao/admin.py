@@ -36,7 +36,8 @@ class MovimentacaoResource(resources.ModelResource):
 
 
 def processo_movimentacao(item: Movimentacao):
-    if not item.processamento:
+    query = Movimentacao.objects.get(id=item.pk)
+    if not query.processamento:
         return None
     item.processamento = False
     movimentacao = Movimentar(item)
