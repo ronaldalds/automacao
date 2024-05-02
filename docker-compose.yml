@@ -5,21 +5,20 @@ services:
     image: postgres:16
     container_name: psql
     environment:
-      POSTGRES_DB: automacao
-      POSTGRES_USER: automacao
-      POSTGRES_PASSWORD: ralds
+      POSTGRES_DB: teste
+      POSTGRES_USER: teste
+      POSTGRES_PASSWORD: teste
     ports:
       - "5432:5432"
     volumes:
       - ./data:/var/lib/postgresql/data
-
 
   automacao:
     container_name: automacao
     build:
       context: .
     ports:
-      - 3333:3333
+      - 8000:8000
     volumes:
       - .:/app
     shm_size: 4g

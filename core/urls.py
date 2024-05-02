@@ -18,7 +18,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
-from .views import cronos_admin_login, ValidateTokenView
+from .views import cronos_admin_login
 from rest_framework.authtoken.views import obtain_auth_token
 from rest_framework import permissions
 from drf_yasg.views import get_schema_view
@@ -38,45 +38,10 @@ schema_view = get_schema_view(
 )
 
 urlpatterns = [
-    path(
-        'admin/login/',
-        cronos_admin_login
-    ),
-    path(
-        'admin/',
-        admin.site.urls
-    ),
-    path(
-        'token/',
-        ValidateTokenView.as_view(),
-        name='validate_token',
-    ),
-    path(
-        'api-auth/',
-        obtain_auth_token,
-        name='api_auth'
-    ),
-    # path(
-    #     "dashboards/",
-    #     include("app.dashboard.urls")
-    # ),
-    # path(
-    #     "watch/",
-    #     include("app.watch.urls")
-    # ),
-    # path(
-    #     "movimentacoes/",
-    #     include("app.movimentacao.urls")
-    # ),
-    # path(
-    #     "ost-tecnicos/",
-    #     include("app.ost.tecnico_urls")
-    # ),
-    path(
-        'swagger/',
-        schema_view.with_ui('swagger', cache_timeout=0),
-        name='schema-swagger-ui'
-    ),
+    path('admin/login/', cronos_admin_login),
+    path('admin/', admin.site.urls),
+    path('api-auth/', obtain_auth_token, name='api_auth'),
+    path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
 ]
 
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
